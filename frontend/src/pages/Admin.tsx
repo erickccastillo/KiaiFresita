@@ -5,7 +5,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
-  category: string; // <-- Se agregó la categoría a la interfaz
+  category: string; 
 }
 
 export default function AdminDashboard() {
@@ -27,9 +27,19 @@ export default function AdminDashboard() {
   }, []);
 
   const filteredProducts = useMemo(() => {
-    return products.filter(product => 
-      product.name.toLowerCase().includes(query.toLowerCase())
-    );
+    return products
+      .filter(product => 
+        product.name.toLowerCase().includes(query.toLowerCase())
+      )
+      .sort((a, b) => {
+        const catA = a.category || 'producto';
+        const catB = b.category || 'producto';
+
+        if (catA === 'producto' && catB !== 'producto') return -1;
+        if (catA !== 'producto' && catB === 'producto') return 1;
+        
+        return a.name.localeCompare(b.name);
+      });
   }, [products, query]);
 
   return (
@@ -54,12 +64,11 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div style={{ marginTop: '2rem', backgroundColor: 'var(--blanco)', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div style={{ marginTop: '2rem', backgroundColor: 'var(--blanco)', borderRadius: '8px', overflowX: 'auto', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+        <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left' }}>
           <thead style={{ backgroundColor: 'var(--fondo)', color: '#333' }}>
             <tr>
               <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Producto</th>
-              {/* Nueva columna para Categoría */}
               <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Categoría</th>
               <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Precio</th>
               <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)', textAlign: 'center' }}>Acciones</th>
@@ -68,19 +77,16 @@ export default function AdminDashboard() {
           <tbody>
             {isLoading ? (
               <tr>
-                {/* Se ajustó colSpan a 4 */}
                 <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>Cargando productos...</td>
               </tr>
             ) : filteredProducts.length === 0 ? (
               <tr>
-                {/* Se ajustó colSpan a 4 */}
                 <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>No se encontraron productos.</td>
               </tr>
             ) : (
               filteredProducts.map(product => (
                 <tr key={product.id} style={{ borderBottom: '1px solid #eee' }}>
                   <td style={{ padding: '1rem' }}>{product.name}</td>
-                  {/* Nueva celda con la categoría en mayúscula inicial */}
                   <td style={{ padding: '1rem', textTransform: 'capitalize' }}>{product.category || 'Producto base'}</td>
                   <td style={{ padding: '1rem', fontWeight: 'bold' }}>${Number(product.price).toFixed(2)}</td>
                   <td style={{ padding: '1rem', textAlign: 'center' }}>
@@ -91,10 +97,11 @@ export default function AdminDashboard() {
                         padding: '8px 12px', 
                         fontSize: '0.9rem', 
                         textDecoration: 'none', 
-                        backgroundColor: '#333' 
+                        backgroundColor: '#333',
+                        whiteSpace: 'nowrap'
                       }}
                     >
-                       Editar
+                      ✏️ Editar
                     </Link>
                   </td>
                 </tr>

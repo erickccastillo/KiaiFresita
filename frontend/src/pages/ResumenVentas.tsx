@@ -101,9 +101,10 @@ export default function ResumenVentas() {
         <p style={{ textAlign: 'center', color: '#777' }}>No se encontraron ventas con estos filtros.</p>
       ) : (
         Object.entries(salesByDate).map(([date, sales]) => (
-          <div key={date} className="day-card" style={{ background: 'white', padding: '1.5rem', marginBottom: '1.5rem', borderRadius: '8px', borderLeft: '5px solid var(--rojo-kiai)' }}>
+          <div key={date} className="day-card" style={{ background: 'white', padding: '1.5rem', marginBottom: '1.5rem', borderRadius: '8px', borderLeft: '5px solid var(--rojo-kiai)', overflowX: 'auto' }}>
             <h3 style={{ color: 'var(--verde-hoja)', borderBottom: '1px solid #eee', paddingBottom: '0.5rem' }}>📅 {date}</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
+            
+            <ul style={{ listStyle: 'none', padding: 0, minWidth: '600px' }}>
               {sales.map(s => (
                 <li key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 0', borderBottom: '1px dashed #eee', gap: '1rem' }}>
                   <div style={{ flex: 1 }}>
@@ -115,7 +116,7 @@ export default function ResumenVentas() {
                     <strong>${Number(s.total_amount || 0).toFixed(2)}</strong>
                     <Link 
                       to={`/admin/ventas/${s.id}`} 
-                      style={{ textDecoration: 'none', backgroundColor: '#333', color: '#fff', padding: '6px 10px', borderRadius: '4px', fontSize: '0.85rem' }}
+                      style={{ textDecoration: 'none', backgroundColor: '#333', color: '#fff', padding: '6px 10px', borderRadius: '4px', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
                     >
                       👁️ Ver detalle
                     </Link>
@@ -123,6 +124,7 @@ export default function ResumenVentas() {
                 </li>
               ))}
             </ul>
+            
             <p style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--rojo-kiai)', fontSize: '1.2rem', marginTop: '1rem' }}>
               Total del día: ${sales.reduce((sum, s) => sum + Number(s.total_amount || 0), 0).toFixed(2)}
             </p>
