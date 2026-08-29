@@ -1,41 +1,24 @@
-import React from 'react';
-
 interface SearchBarProps {
-  value: string;
-  onChange: (value: string) => void;
+  query: string;
+  setQuery: (val: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+export default function SearchBar({ query, setQuery }: SearchBarProps) {
   return (
-    <div style={{ marginBottom: '1.5rem', width: '100%' }}>
+    <div style={{ marginBottom: '1rem' }}>
       <input
         type="text"
-        placeholder=" Buscar producto..."
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        placeholder="Buscar ventas..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         style={{
           width: '100%',
-          padding: '0.9rem 1rem',
-          borderRadius: '10px',
-          border: '1px solid #d9d9d9',
-          fontSize: '1rem',
-          backgroundColor: '#fff',
-          color: '#333',
-          boxSizing: 'border-box',
-          outline: 'none',
-          transition: 'all 0.2s ease',
-        }}
-        onFocus={(e) => {
-          e.target.style.border = '1px solid #e1b71f';
-          e.target.style.boxShadow = '0 0 0 3px rgba(225,183,31,0.2)';
-        }}
-        onBlur={(e) => {
-          e.target.style.border = '1px solid #d9d9d9';
-          e.target.style.boxShadow = 'none';
+          padding: '10px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+          outlineColor: 'var(--verde-hoja)'
         }}
       />
     </div>
   );
-};
-
-export default SearchBar;
+}

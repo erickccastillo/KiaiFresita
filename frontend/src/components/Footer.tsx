@@ -1,13 +1,15 @@
-import React from 'react';
-
-const Footer: React.FC = () => {
+export default function Footer() {
   return (
-    <footer style={{ background: '#fff', borderTop: '1px solid #eee', padding: '1rem 0' }}>
-      <div className="container" style={{ textAlign: 'center', color: 'var(--muted)' }}>
-        © {new Date().getFullYear()}Pisos y Azulejos Revestimento. Todos los derechos reservados.                    Hecho con cuidado.
-      </div>
+    <footer style={{ 
+      backgroundColor: 'var(--rojo-kiai)', 
+      color: 'var(--blanco)', 
+      textAlign: 'center', 
+      padding: '1rem', 
+      marginTop: 'auto' 
+    }}>
+      <p style={{ margin: 0, fontWeight: 'bold' }}>
+        © {new Date().getFullYear()} Kiai Fresita. Todos los derechos reservados. 🥋
+      </p>
     </footer>
   );
-};
-
-export default Footer;
+}

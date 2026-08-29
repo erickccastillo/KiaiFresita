@@ -1,34 +1,28 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Catalog from './pages/Catalog';
-import AdminDashboard from './pages/AdminDashboard'; // <-- Importamos el nuevo panel
-import AdminProductForm from './pages/AdminProductForm'; 
-import About from './pages/About'; 
+import Admin from './pages/Admin'; 
+import ResumenVentas from './pages/ResumenVentas';
+import AdminSaleForm from './pages/AdminSaleForm'; // <-- Importamos el formulario
+import AdminProductForm from './pages/AdminProductForm';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="app-root">
+    <div className="app-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <main className="container">
+      <main className="container" style={{ padding: '2rem', flex: 1 }}>
         <Routes>
+          {/* Rutas Públicas */}
           <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/about" element={<About />} />
           
-          {/* NUEVAS RUTAS DE ADMINISTRADOR */}
-          {/* 1. La tabla principal con buscador */}
-          <Route path="/admin" element={<AdminDashboard />} /> 
-          
-          {/* 2. El formulario en modo "Crear nuevo" */}
-          <Route path="/admin/new" element={<AdminProductForm />} /> 
-          
-          {/* 3. El formulario en modo "Editar" (acepta un ID) */}
-          <Route path="/admin/edit/:id" element={<AdminProductForm />} /> 
-          
+          {/* Rutas de Administrador */}
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/ventas" element={<ResumenVentas />} />
+          <Route path="/admin/new-sale" element={<AdminSaleForm />} /> {/* <-- Nueva ruta */}
+          <Route path="/admin/new" element={<AdminProductForm />} />
         </Routes>
       </main>
       <Footer />
