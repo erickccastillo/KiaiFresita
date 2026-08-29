@@ -86,5 +86,28 @@ app.post('/api/sales', async (req: Request, res: Response) => {
   res.json({ success: true, order_number: nextOrderNumber, data });
 });
 
+// Obtener un solo producto para editarlo
+app.get('/api/products/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
+  
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+// Actualizar un producto existente
+app.put('/api/products/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, description, price, category } = req.body;
+  
+  const { data, error } = await supabase
+    .from('products')
+    .update({ name, description, price, category })
+    .eq('id', id);
+    
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🥋 Backend de Kiai Fresita en puerto ${PORT}`));
