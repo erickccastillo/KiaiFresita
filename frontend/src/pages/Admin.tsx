@@ -48,18 +48,18 @@ export default function AdminDashboard() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '1.5rem',
+        marginBottom: '2rem',
         flexWrap: 'wrap',
         gap: '1rem'
       }}>
         <h2 style={{ color: 'var(--verde-hoja)', margin: 0 }}>🥋 Panel de Control</h2>
         
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <Link to="/admin/new-sale" className="btn-rojo" style={{ textDecoration: 'none', backgroundColor: 'var(--verde-hoja)', fontSize: '0.9rem', padding: '8px 12px' }}>
-            + Venta
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Link to="/admin/new-sale" className="btn-rojo" style={{ textDecoration: 'none', backgroundColor: 'var(--verde-hoja)' }}>
+            + Nueva Venta
           </Link>
-          <Link to="/admin/new" className="btn-rojo" style={{ textDecoration: 'none', fontSize: '0.9rem', padding: '8px 12px' }}>
-            + Producto
+          <Link to="/admin/new" className="btn-rojo" style={{ textDecoration: 'none' }}>
+            + Nuevo Producto
           </Link>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
                         display: 'inline-block'
                       }}
                     >
-                       Editar
+                      ✏️ Editar
                     </Link>
                   </td>
                 </tr>
