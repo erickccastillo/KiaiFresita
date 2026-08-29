@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
@@ -10,44 +10,53 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
+// Validar credenciales para evitar que Render truene si faltan las variables
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Endpoint para guardar una venta (Lo usarás en tu vista Admin)
-app.post('/api/sales', async (req, res) => {
-  const { amount, description } = req.body;
-  const { data, error } = await supabase.from('sales').insert([{ amount, description }]);
-  
-  if (error) return res.status(400).json({ error: error.message });
-  res.json(data);
-});
+// ==========================================
+// ENDPOINTS DE PRODUCTOS Y TOPPINGS
+// ==========================================
 
-// Endpoint para obtener todas las ventas
-app.get('/api/sales', async (req, res) => {
-  const { data, error } = await supabase.from('sales').select('*').order('sale_date', { ascending: false });
-  
-  if (error) return res.status(400).json({ error: error.message });
-  res.json(data);
-});
-
-app.get('/api/products', async (req, res) => {
+// Obtener catálogo
+app.get('/api/products', async (req: Request, res: Response) => {
   const { data, error } = await supabase.from('products').select('*').order('name');
   if (error) return res.status(400).json({ error: error.message });
   res.json(data);
 });
 
-app.post('/api/products', async (req, res) => {
-  const { name, description, price } = req.body;
-  const { data, error } = await supabase.from('products').insert([{ name, description, price }]);
+// Crear producto nuevo
+app.post('/api/products', async (req: Request, res: Response) => {
+  // Ahora aceptamos la categoría para diferenciar productos de toppings
+  const { name, description, price, category } = req.body;
+  const { data, error } = await supabase.from('products').insert([{ name, description, price, category }]);
   
   if (error) return res.status(400).json({ error: error.message });
   res.json(data);
 });
 
-app.post('/api/sales', async (req, res) => {
+
+// ==========================================
+// ENDPOINTS DE VENTAS Y CARRITO
+// ==========================================
+
+// Historial de ventas
+app.get('/api/sales', async (req: Request, res: Response) => {
+  const { data, error } = await supabase.from('sales').select('*').order('created_at', { ascending: false });
+  
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+// Registrar la orden del día (Carrito)
+app.post('/api/sales', async (req: Request, res: Response) => {
   const { total_amount, items } = req.body;
   
-  // Obtener la fecha actual en formato YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
+  // Ajustamos la hora para México (CST) para que las ventas de la noche no cuenten como "mañana" por el UTC de los servidores
+  const now = new Date();
+  now.setHours(now.getHours() - 6); 
+  const today = now.toISOString().split('T')[0];
 
   // 1. Buscar el número de orden más alto de hoy
   const { data: todaySales, error: fetchError } = await supabase
@@ -69,7 +78,7 @@ app.post('/api/sales', async (req, res) => {
   const { data, error } = await supabase.from('sales').insert([{
     daily_order_number: nextOrderNumber,
     total_amount,
-    items, // El array del carrito
+    items, // El array completo de JSONB
     sale_date: today
   }]);
   

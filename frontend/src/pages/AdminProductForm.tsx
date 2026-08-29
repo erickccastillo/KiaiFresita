@@ -15,7 +15,8 @@ export default function AdminProductForm() {
     setStatus('loading');
 
     try {
-      const response = await fetch('http://localhost:3000/api/products', {
+      // Cambio aplicado aquí:
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

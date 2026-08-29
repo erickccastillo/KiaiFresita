@@ -66,7 +66,8 @@ export default function AdminSaleForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/products')
+    // Cambio 1: Cargar catálogo desde la variable de entorno
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error("Error cargando productos", err));
@@ -96,7 +97,8 @@ export default function AdminSaleForm() {
     }));
 
     try {
-      const response = await fetch('http://localhost:3000/api/sales', {
+      // Cambio 2: Registrar la venta en la variable de entorno
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/sales`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ total_amount: cartTotal, items: itemsToSave }),
