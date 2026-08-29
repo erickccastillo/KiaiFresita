@@ -43,65 +43,68 @@ export default function AdminDashboard() {
   }, [products, query]);
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', padding: '0 10px' }}>
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: '2rem',
+        marginBottom: '1.5rem',
         flexWrap: 'wrap',
         gap: '1rem'
       }}>
         <h2 style={{ color: 'var(--verde-hoja)', margin: 0 }}>🥋 Panel de Control</h2>
         
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/admin/new-sale" className="btn-rojo" style={{ textDecoration: 'none', backgroundColor: 'var(--verde-hoja)' }}>
-            + Nueva Venta
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Link to="/admin/new-sale" className="btn-rojo" style={{ textDecoration: 'none', backgroundColor: 'var(--verde-hoja)', fontSize: '0.9rem', padding: '8px 12px' }}>
+            + Venta
           </Link>
-          <Link to="/admin/new" className="btn-rojo" style={{ textDecoration: 'none' }}>
-            + Nuevo Producto
+          <Link to="/admin/new" className="btn-rojo" style={{ textDecoration: 'none', fontSize: '0.9rem', padding: '8px 12px' }}>
+            + Producto
           </Link>
         </div>
       </div>
 
-      <div style={{ marginTop: '2rem', backgroundColor: 'var(--blanco)', borderRadius: '8px', overflowX: 'auto', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-        <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div style={{ backgroundColor: 'var(--blanco)', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', tableLayout: 'fixed' }}>
           <thead style={{ backgroundColor: 'var(--fondo)', color: '#333' }}>
             <tr>
-              <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Producto</th>
-              <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Categoría</th>
-              <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)' }}>Precio</th>
-              <th style={{ padding: '1rem', borderBottom: '2px solid var(--rojo-kiai)', textAlign: 'center' }}>Acciones</th>
+              <th style={{ padding: '12px 8px', borderBottom: '2px solid var(--rojo-kiai)', width: '50%' }}>Producto</th>
+              <th style={{ padding: '12px 8px', borderBottom: '2px solid var(--rojo-kiai)', width: '25%' }}>Precio</th>
+              <th style={{ padding: '12px 8px', borderBottom: '2px solid var(--rojo-kiai)', width: '25%', textAlign: 'center' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>Cargando productos...</td>
+                <td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>Cargando productos...</td>
               </tr>
             ) : filteredProducts.length === 0 ? (
               <tr>
-                <td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>No se encontraron productos.</td>
+                <td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>No se encontraron productos.</td>
               </tr>
             ) : (
               filteredProducts.map(product => (
                 <tr key={product.id} style={{ borderBottom: '1px solid #eee' }}>
-                  <td style={{ padding: '1rem' }}>{product.name}</td>
-                  <td style={{ padding: '1rem', textTransform: 'capitalize' }}>{product.category || 'Producto base'}</td>
-                  <td style={{ padding: '1rem', fontWeight: 'bold' }}>${Number(product.price).toFixed(2)}</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>
+                  <td style={{ padding: '12px 8px', wordBreak: 'break-word' }}>
+                    <div style={{ fontWeight: '500' }}>{product.name}</div>
+                    <span style={{ fontSize: '0.75rem', color: '#888', textTransform: 'capitalize' }}>
+                      {product.category || 'Producto base'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '12px 8px', fontWeight: 'bold' }}>${Number(product.price).toFixed(2)}</td>
+                  <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                     <Link 
                       to={`/admin/edit/${product.id}`} 
                       className="btn-rojo" 
                       style={{ 
-                        padding: '8px 12px', 
-                        fontSize: '0.9rem', 
+                        padding: '6px 10px', 
+                        fontSize: '0.8rem', 
                         textDecoration: 'none', 
                         backgroundColor: '#333',
-                        whiteSpace: 'nowrap'
+                        display: 'inline-block'
                       }}
                     >
-                      ✏️ Editar
+                       Editar
                     </Link>
                   </td>
                 </tr>
