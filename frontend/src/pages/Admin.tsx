@@ -104,7 +104,7 @@ export default function AdminDashboard() {
                         display: 'inline-block'
                       }}
                     >
-                      ✏️ Editar
+                      Editar
                     </Link>
                   </td>
                 </tr>
