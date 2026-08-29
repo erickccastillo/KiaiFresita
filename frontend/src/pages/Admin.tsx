@@ -90,7 +90,7 @@ export default function AdminDashboard() {
                         backgroundColor: '#333' 
                       }}
                     >
-                      ✏️ Editar
+                       Editar
                     </Link>
                   </td>
                 </tr>
