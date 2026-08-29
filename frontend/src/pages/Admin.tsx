@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import SearchBar from "../components/SearchBar";
+
 
 interface Product {
   id: string;
@@ -14,7 +14,8 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/products')
+    // Cambio aplicado aquí:
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
       .then(res => res.json())
       .then(data => {
         setProducts(data);
@@ -54,8 +55,6 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </div>
-
-  
 
       <div style={{ marginTop: '2rem', backgroundColor: 'var(--blanco)', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
