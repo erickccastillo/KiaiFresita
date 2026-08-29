@@ -109,5 +109,23 @@ app.put('/api/products/:id', async (req: Request, res: Response) => {
   res.json(data);
 });
 
+// Obtener una venta por su ID
+app.get('/api/sales/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await supabase.from('sales').select('*').eq('id', id).single();
+  
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+// Eliminar una venta
+app.delete('/api/sales/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await supabase.from('sales').delete().eq('id', id);
+  
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ success: true, message: 'Venta eliminada correctamente', data });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🥋 Backend de Kiai Fresita en puerto ${PORT}`));

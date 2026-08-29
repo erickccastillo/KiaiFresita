@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css'; 
 
-// 1. Actualizamos la interfaz para que coincida con tu base de datos actual
 interface SaleItem {
   product_name: string;
   toppings: string[];
@@ -19,13 +19,11 @@ interface Sale {
 
 export default function ResumenVentas() {
   const [allSales, setAllSales] = useState<Sale[]>([]);
-  
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchProduct, setSearchProduct] = useState('');
 
   useEffect(() => {
-    // 2. Usamos la variable de entorno para conectar con Render
     fetch(`${import.meta.env.VITE_API_URL}/sales`)
       .then(res => res.json())
       .then(data => setAllSales(data))
@@ -37,7 +35,6 @@ export default function ResumenVentas() {
       const matchStart = startDate ? sale.sale_date >= startDate : true;
       const matchEnd = endDate ? sale.sale_date <= endDate : true;
       
-      // 3. Buscamos el texto dentro del arreglo de productos comprados (carrito)
       const matchProduct = searchProduct 
         ? sale.items?.some(item => 
             item.product_name.toLowerCase().includes(searchProduct.toLowerCase())
@@ -108,13 +105,21 @@ export default function ResumenVentas() {
             <h3 style={{ color: 'var(--verde-hoja)', borderBottom: '1px solid #eee', paddingBottom: '0.5rem' }}>📅 {date}</h3>
             <ul style={{ listStyle: 'none', padding: 0 }}>
               {sales.map(s => (
-                <li key={s.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px dashed #eee' }}>
-                  <span>
+                <li key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 0', borderBottom: '1px dashed #eee', gap: '1rem' }}>
+                  <div style={{ flex: 1 }}>
                     <strong>Orden #{s.daily_order_number || '-'}: </strong> 
-                    {/* 4. Mapeamos el carrito de compras para mostrarlo como descripción */}
-                    {s.items?.map(i => `${i.quantity}x ${i.product_name}`).join(', ') || 'Venta sin detalle'}
-                  </span>
-                  <strong>${Number(s.total_amount || 0).toFixed(2)}</strong>
+                    <span>{s.items?.map(i => `${i.quantity}x ${i.product_name}`).join(', ') || 'Venta sin detalle'}</span>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <strong>${Number(s.total_amount || 0).toFixed(2)}</strong>
+                    <Link 
+                      to={`/admin/ventas/${s.id}`} 
+                      style={{ textDecoration: 'none', backgroundColor: '#333', color: '#fff', padding: '6px 10px', borderRadius: '4px', fontSize: '0.85rem' }}
+                    >
+                      👁️ Ver detalle
+                    </Link>
+                  </div>
                 </li>
               ))}
             </ul>
