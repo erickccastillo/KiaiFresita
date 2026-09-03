@@ -1,8 +1,17 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --rojo-kiai: #E63946;
-  --verde-hoja: #2A9D8F;
+  --verde-hoja: #4CAF50;
   --blanco: #FFFFFF;
   --fondo: #F8F9FA;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 body { background-color: var(--fondo); color: #333; font-family: sans-serif; margin: 0; }
 .btn-rojo { background-color: var(--rojo-kiai); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
