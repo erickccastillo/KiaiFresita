@@ -14,17 +14,18 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Reemplaza apiUrl con import.meta.env.VITE_API_URL en tu proyecto local Vite.
-    const apiUrl = "";
-
-    fetch(`${apiUrl}/products`)
-      .then(res => res.json())
+    // Conexión real a la base de datos usando las variables de entorno de Vite
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
+      .then(res => {
+        if (!res.ok) throw new Error("Error en la respuesta del servidor");
+        return res.json();
+      })
       .then(data => {
         setProducts(data);
         setIsLoading(false);
       })
       .catch(err => {
-        console.error("Error al cargar productos:", err);
+        console.error("Error al cargar productos desde la base de datos:", err);
         setIsLoading(false);
       });
   }, []);
