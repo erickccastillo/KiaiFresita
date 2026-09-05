@@ -9,10 +9,32 @@
   --verde-hoja: #4CAF50;
   --blanco: #FFFFFF;
   --fondo: #F8F9FA;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
 }
-body { background-color: var(--fondo); color: #333; font-family: sans-serif; margin: 0; }
-.btn-rojo { background-color: var(--rojo-kiai); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.btn-rojo:hover { opacity: 0.9; }
+
+* {
+  box-sizing: border-box;
+}
+
+/* El body totalmente libre de márgenes y paddings */
+body { 
+  background-color: var(--fondo); 
+  color: #333; 
+  font-family: sans-serif; 
+  margin: 0; 
+  padding: 0;
+}
+
+.btn-rojo { 
+  background-color: var(--rojo-kiai); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  transition: opacity 0.3s ease;
+}
+
+.btn-rojo:hover { 
+  opacity: 0.9; 
+}
