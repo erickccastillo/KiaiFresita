@@ -412,31 +412,6 @@ export default function Home() {
             </span>
           </h1>
 
-          <div className="product-showcase" id="product-stack" ref={productRef}>
-            {/* Front Image: Strawberries & Cream */}
-            <img 
-              className="product__sizer" 
-              src="https://images.unsplash.com/photo-1553787762-b5f2081c15c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1280&q=80"
-              alt="" 
-              aria-hidden="true" 
-            />
-            
-            <div className="product__layer product__layer--bg" id="product-bg" ref={bgLayerRef}>
-              <img 
-                src="https://images.unsplash.com/photo-1553787762-b5f2081c15c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1280&q=80"
-                alt="Vaso de fresas con crema" 
-              />
-            </div>
-            
-            {/* Reveal Image: Close up of vibrant fresh strawberries */}
-            <div className="product__layer product__layer--top" id="product-top" aria-hidden="true" ref={topLayerRef}>
-              <img 
-                src="https://images.unsplash.com/photo-1553787762-b5f2081c15c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1280&q=80"
-                alt="Fresas frescas" 
-              />
-            </div>
-          </div>
-
           <div className="support-copy support-copy--left">
             <span className="support-copy__inner">Energía, frescura<br />y diversión.</span>
           </div>
