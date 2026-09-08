@@ -311,3 +311,35 @@ footer {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* =========================================
+   CORRECCIÓN DEL ESPACIO ANTES DEL FOOTER
+========================================= */
+
+html,
+body,
+#root,
+.app-root,
+.app-main {
+  background-color: var(--fondo) !important;
+}
+
+.app-main {
+  flex: 1 1 auto;
+}
+
+/*
+  Solo pinta el espacio disponible.
+  No modifica el layout interno del Home.
+*/
+@media (max-width: 768px) {
+  html,
+  body,
+  #root,
+  .app-root,
+  .app-main {
+    background-color: var(--fondo) !important;
+  }
+}
+``
