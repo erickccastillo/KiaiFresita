@@ -419,11 +419,7 @@ min-height: 55vh;
     text-align: right;
   }
 
-  .mobile-copy-container{
-  display:flex;
-  justify-content:space-between;
-  margin-top:3rem;
-}
+
 
 }
       `}</style>
