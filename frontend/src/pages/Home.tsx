@@ -457,7 +457,8 @@ export default function Home() {
             </span>
           </h1>
 
-         <div className="mobile-slogans">
+<div className="mobile-slogans">
+
   <div className="support-copy support-copy--left">
     <span className="support-copy__inner">
       Energía, frescura<br />
@@ -471,6 +472,7 @@ export default function Home() {
       de sabor.
     </span>
   </div>
+
 </div>
 
         </section>
