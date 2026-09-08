@@ -36,10 +36,10 @@ body,
   min-height: 100%;
   margin: 0;
   padding: 0;
+  background-color: var(--fondo);
 }
 
 html {
-  background-color: var(--fondo);
   scroll-behavior: smooth;
 }
 
@@ -47,7 +47,6 @@ body {
   min-width: 280px;
   min-height: 100svh;
   overflow-x: hidden;
-  background-color: var(--fondo);
   color: var(--texto);
 }
 
@@ -55,7 +54,6 @@ body {
   display: flex;
   min-height: 100svh;
   flex-direction: column;
-  background-color: var(--fondo);
 }
 
 *,
@@ -112,11 +110,8 @@ p {
 }
 
 /*
-  El Header usa position: sticky y permanece
-  dentro del flujo del documento.
-
-  Por eso no debe existir padding-top
-  compensatorio en app-main.
+  El Header utiliza position: sticky y ocupa
+  su propio espacio. No se necesita padding-top.
 */
 
 .app-main {
@@ -131,9 +126,8 @@ p {
 }
 
 /*
-  El componente renderizado por Routes ocupa
-  todo el ancho y puede aprovechar la altura
-  restante entre Header y Footer.
+  Las páginas renderizadas por React Router
+  ocupan el ancho completo.
 */
 
 .app-main > * {
@@ -142,13 +136,15 @@ p {
 }
 
 /*
-  Permite que el Home ocupe la altura restante,
-  sin obligar a todas las páginas administrativas
-  a estirarse.
+  El Home ocupa todo el espacio restante entre
+  el Header y el Footer.
 */
 
 .app-main > .home-page {
+  display: flex;
+  min-height: 0;
   flex: 1 1 auto;
+  background-color: var(--fondo);
 }
 
 /* =========================================
@@ -156,6 +152,7 @@ p {
 ========================================= */
 
 .kiai-header {
+  width: 100%;
   flex: 0 0 auto;
 }
 
@@ -241,17 +238,17 @@ footer {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgba(137, 20, 17, 0.06);
+  background-color: rgba(137, 20, 17, 0.06);
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--rojo-oscuro);
+  background-color: var(--rojo-oscuro);
   border: 2px solid var(--fondo);
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--rojo-kiai);
+  background-color: var(--rojo-kiai);
 }
 
 /* =========================================
@@ -261,14 +258,20 @@ footer {
 @media (max-width: 768px) {
   html,
   body,
+  #root,
+  .app-root,
+  .app-main {
+    background-color: var(--fondo);
+  }
+
+  html,
+  body,
   #root {
     min-height: 100svh;
-    background-color: var(--fondo);
   }
 
   .app-root {
     min-height: 100svh;
-    background-color: var(--fondo);
   }
 
   .app-main {
@@ -276,16 +279,11 @@ footer {
     min-height: 0;
     flex: 1 1 auto;
     padding: 0;
-    background-color: var(--fondo);
   }
-
-  /*
-    El Home absorbe la altura restante de la
-    pantalla, distribuyendo título, fresa y frases.
-  */
 
   .app-main > .home-page {
     display: flex;
+    width: 100%;
     min-height: 0;
     flex: 1 1 auto;
     background-color: var(--fondo);
@@ -307,16 +305,6 @@ footer {
   .btn-rojo {
     padding: 8px 11px;
     font-size: 0.78rem;
-  }
-}
-
-/* =========================================
-   PANTALLAS MUY ANGOSTAS
-========================================= */
-
-@media (max-width: 320px) {
-  body {
-    min-width: 280px;
   }
 }
 
