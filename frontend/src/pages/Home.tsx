@@ -381,9 +381,15 @@ export default function Home() {
 @media (max-width: 768px) {
 
   .stage {
-    padding-top: 110px;
-    min-height: 70vh;
-  }
+padding-top: 100px;
+min-height: 65vh;
+}
+  .viewport {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--surface);
+}
 
   .brand-word {
     position: relative;
@@ -400,16 +406,8 @@ export default function Home() {
   }
 
   .support-copy {
-    position: absolute;
-
-    bottom: 14vh;
-
-    width: 42vw;
-
-    font-size: .9rem;
-
-    line-height: 1.05;
-  }
+bottom: 18vh;
+}
 
   .support-copy--left {
     left: 5vw;
