@@ -104,14 +104,15 @@ p {
   display: flex;
   width: 100%;
   min-height: 100svh;
-  flex: 1 0 auto;
   flex-direction: column;
   background-color: var(--fondo);
 }
 
 /*
   El Header utiliza position: sticky y ocupa
-  su propio espacio. No se necesita padding-top.
+  su propio espacio dentro del flujo.
+
+  Por eso app-main no necesita padding-top.
 */
 
 .app-main {
@@ -127,24 +128,15 @@ p {
 
 /*
   Las páginas renderizadas por React Router
-  ocupan el ancho completo.
+  ocupan todo el ancho disponible.
+
+  Esta regla no modifica el fondo, altura ni
+  distribución interna de las páginas.
 */
 
 .app-main > * {
   width: 100%;
   min-width: 0;
-}
-
-/*
-  El Home ocupa todo el espacio restante entre
-  el Header y el Footer.
-*/
-
-.app-main > .home-page {
-  display: flex;
-  min-height: 0;
-  flex: 1 1 auto;
-  background-color: var(--fondo);
 }
 
 /* =========================================
@@ -276,17 +268,10 @@ footer {
 
   .app-main {
     width: 100%;
+    min-width: 0;
     min-height: 0;
     flex: 1 1 auto;
     padding: 0;
-  }
-
-  .app-main > .home-page {
-    display: flex;
-    width: 100%;
-    min-height: 0;
-    flex: 1 1 auto;
-    background-color: var(--fondo);
   }
 
   .btn-rojo {
