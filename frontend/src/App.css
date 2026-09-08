@@ -249,19 +249,28 @@ footer {
   #root {
     min-height: 100svh;
   }
+.app-root {
+  display: flex;
+  width: 100%;
+  min-height: 100svh;
+  flex-direction: column;
+  background-color: #fef1e4;
+}
 
-  .app-root {
-    min-height: 100svh;
-  }
+.app-main {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex: 1 0 auto;
+  flex-direction: column;
+  padding: 0;
+  background-color: #fef1e4;
+}
 
-  .app-main {
-    width: 100%;
-    min-height: 0;
-
-    padding: 0;
-
-    flex: 1 0 auto;
-  }
+.app-main > * {
+  width: 100%;
+  flex: 1 0 auto;
+}
 
   .btn-rojo {
     min-height: 40px;
