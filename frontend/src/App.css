@@ -137,6 +137,10 @@ p {
 .app-main > * {
   width: 100%;
   min-width: 0;
+  /* Obliga a la vista de la página a estirarse y llenar el espacio vacío */
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================================
