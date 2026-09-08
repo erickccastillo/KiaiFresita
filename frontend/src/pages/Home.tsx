@@ -377,30 +377,29 @@ export default function Home() {
           }
         }
 
-/* Responsive */
 @media (max-width: 768px) {
 
   .viewport {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: auto;
     background: var(--surface);
   }
 
   .stage {
-    display: flex;
-    flex-direction: column;
-
-    padding-top: 100px;
+    padding-top: 80px;
     padding-left: 20px;
     padding-right: 20px;
 
-    min-height: calc(100vh - 170px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-height: auto;
   }
 
   .brand-word {
     position: relative;
-
     top: 0;
     left: 0;
 
@@ -412,39 +411,34 @@ export default function Home() {
 
     line-height: .85;
 
-    margin-bottom: auto;
+    margin-bottom: 60px;
+  }
+
+  .mobile-slogans {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 40px;
+    margin-bottom: 40px;
   }
 
   .support-copy {
     position: static;
 
-    width: auto;
+    width: 42%;
 
     font-size: .95rem;
 
     line-height: 1.05;
   }
 
-  .support-copy--left,
-  .support-copy--right {
-    left: auto;
-    right: auto;
-  }
-
   .support-copy--right {
     text-align: right;
   }
-
-  .mobile-slogans {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-
-    margin-top: auto;
-
-    padding-bottom: 20px;
-  }
 }
+
 
 
 }
