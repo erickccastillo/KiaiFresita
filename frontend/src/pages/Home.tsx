@@ -144,7 +144,7 @@ export default function Home() {
         :root {
           --home-ink: #891411;
           --home-primary: #c61d0f;
-          --home-surface: #fef1e4;
+          --home-surface: #c61d0f11;
           --home-green: #46713c;
           --home-reveal: cubic-bezier(0.16, 1, 0.3, 1);
           --home-soft: cubic-bezier(0.25, 0.8, 0.28, 1);
