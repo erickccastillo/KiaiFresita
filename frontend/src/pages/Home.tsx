@@ -382,7 +382,7 @@ export default function Home() {
 
   .stage {
 padding-top: 100px;
-min-height: 65vh;
+min-height: 55vh;
 }
   .viewport {
   position: relative;
@@ -405,8 +405,9 @@ min-height: 65vh;
     line-height: .85;
   }
 
-  .support-copy {
-bottom: 18vh;
+
+.support-copy {
+  bottom: 22vh;
 }
 
   .support-copy--left {
@@ -417,6 +418,12 @@ bottom: 18vh;
     right: 5vw;
     text-align: right;
   }
+
+  .mobile-copy-container{
+  display:flex;
+  justify-content:space-between;
+  margin-top:3rem;
+}
 
 }
       `}</style>
