@@ -305,8 +305,11 @@ export default function AdminSaleForm() {
         }
 
 .qty-input{
-  width:60px;
-  padding:6px;
+width:80px;
+text-align:center;
+border-radius:12px;
+border:1px solid #ddd;
+padding:10px;
 }
 
         .add-btn{
