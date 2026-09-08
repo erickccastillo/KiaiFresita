@@ -158,9 +158,10 @@ export default function Home() {
         .home-page {
           position: relative;
           display: flex;
+          flex-direction: column; /* Añadido para apilar las secciones */
           width: 100%;
           min-height: calc(100svh - 90px);
-          overflow: hidden;
+          overflow-x: hidden; /* Cambiado de hidden a overflow-x: hidden para permitir scroll vertical */
           background:
             radial-gradient(
               circle at 73% 47%,
@@ -190,6 +191,90 @@ export default function Home() {
           flex-direction: column;
           justify-content: space-between;
           isolation: isolate;
+        }
+
+        /*
+          Nueva Sección Informativa
+        */
+        .info-section {
+          position: relative;
+          z-index: 5;
+          width: 100%;
+          padding: clamp(60px, 10vh, 100px) 4.35vw;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: var(--home-surface);
+        }
+
+        .info-container {
+          max-width: 800px;
+          text-align: center;
+        }
+
+        .info-title {
+          font-family: "Fredoka", sans-serif;
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          color: var(--home-primary);
+          margin: 0 0 24px;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+        }
+
+        .info-description {
+          font-size: clamp(1.1rem, 2vw, 1.35rem);
+          line-height: 1.6;
+          color: var(--home-ink);
+          margin: 0 0 48px;
+          font-weight: 700;
+        }
+
+        .info-event-card {
+          background: rgba(198, 29, 15, 0.04);
+          border: 3px dashed rgba(198, 29, 15, 0.2);
+          border-radius: 32px;
+          padding: clamp(30px, 5vw, 50px);
+          transition: transform 0.3s var(--home-reveal), border-color 0.3s ease;
+        }
+
+        .info-event-card:hover {
+          transform: translateY(-8px);
+          border-color: var(--home-primary);
+        }
+
+        .info-event-title {
+          font-family: "Fredoka", sans-serif;
+          font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+          color: var(--home-green);
+          margin: 0 0 16px;
+        }
+
+        .info-event-text {
+          font-size: clamp(1rem, 1.5vw, 1.15rem);
+          line-height: 1.5;
+          margin: 0 0 32px;
+          font-weight: 700;
+        }
+
+        .info-button {
+          display: inline-block;
+          background-color: var(--home-primary);
+          color: var(--home-surface);
+          border: none;
+          padding: 16px 40px;
+          border-radius: 50px;
+          font-family: "Nunito", sans-serif;
+          font-size: clamp(1rem, 1.5vw, 1.15rem);
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.3s var(--home-reveal);
+        }
+
+        .info-button:hover {
+          background-color: var(--home-ink);
+          transform: scale(1.05);
         }
 
         /*
@@ -694,8 +779,9 @@ export default function Home() {
 
         @media (max-width: 768px) {
           .home-page {
+            /* Permite scroll natural en el móvil, quitando el overflow hidden restrictivo */
             min-height: auto;
-            overflow: visible;
+            overflow-x: hidden;
             background:
               radial-gradient(
                 circle at 50% 58%,
@@ -790,6 +876,15 @@ export default function Home() {
               var(--home-reveal)
               450ms
               both;
+          }
+          
+          /* Ajustes de sección de información en móvil */
+          .info-section {
+            padding: 50px 18px;
+          }
+          
+          .info-event-card {
+            padding: 30px 20px;
           }
         }
 
@@ -966,6 +1061,31 @@ export default function Home() {
                 de sabor.
               </span>
             </p>
+          </div>
+        </section>
+
+        {/* --- NUEVA SECCIÓN INFORMATIVA --- */}
+        <section className="info-section">
+          <div className="info-container">
+            <h2 className="info-title">El auténtico sabor de las fresas con crema</h2>
+            
+            <p className="info-description">
+              En <strong>Kiai Fresita</strong> nos apasiona crear la mezcla perfecta de fresas frescas 
+              y nuestra crema dulce artesanal. Disfruta de un postre tradicional con un toque único, 
+              preparado al instante y siempre con ingredientes de la más alta calidad.
+            </p>
+            
+            <div className="info-event-card">
+              <h3 className="info-event-title">¡Llevamos el sabor a tus eventos!</h3>
+              <p className="info-event-text">
+                ¿Tienes una fiesta, reunión o celebración corporativa? Ofrecemos nuestro exclusivo 
+                <strong> servicio de carrito de fresas con crema</strong>. Sorprende a tus invitados 
+                con una estación de postres inolvidable y completamente personalizada para tu evento especial.
+              </p>
+              <button className="info-button">
+                Cotizar mi evento
+              </button>
+            </div>
           </div>
         </section>
       </main>
