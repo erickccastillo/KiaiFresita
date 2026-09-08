@@ -696,13 +696,7 @@ export default function Home() {
           .home-page {
             min-height: auto;
             overflow: visible;
-            background:
-              radial-gradient(
-                circle at 50% 58%,
-                rgba(198, 29, 15, 0.075),
-                transparent 42%
-              ),
-              var(--home-surface);
+            background: --home-surface: var(--fondo);
           }
 
           .home-stage {
