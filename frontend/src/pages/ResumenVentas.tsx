@@ -51,89 +51,434 @@ export default function ResumenVentas() {
       return acc;
     }, {});
   }, [filteredSales]);
+return (
+  <>
+    <style>{`
+      .sales-page{
+        background:#fef1e4;
+        min-height:100vh;
+        padding:20px;
+      }
 
-  return (
-    <div className="home-container" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', padding: '0 10px' }}>
-      <h2 style={{ color: 'var(--verde-hoja)', marginBottom: '1rem' }}>🥋 Resumen de Ventas</h2>
-      
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', backgroundColor: 'var(--blanco)', padding: '1.2rem', borderRadius: '8px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-        <div style={{ flex: '1 1 180px', display: 'flex', flexDirection: 'column' }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#555' }}>Buscar:</label>
-          <input 
-            type="text" 
-            placeholder="Ej. Fresas..."
-            value={searchProduct}
-            onChange={(e) => setSearchProduct(e.target.value)}
-            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-          />
-        </div>
-        <div style={{ flex: '1 1 130px', display: 'flex', flexDirection: 'column' }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#555' }}>Desde:</label>
-          <input 
-            type="date" 
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-          />
-        </div>
-        <div style={{ flex: '1 1 130px', display: 'flex', flexDirection: 'column' }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#555' }}>Hasta:</label>
-          <input 
-            type="date" 
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-          />
-        </div>
-        
-        <div style={{ display: 'flex', alignItems: 'flex-end', width: '100%' }}>
-          <button 
-            onClick={() => { setStartDate(''); setEndDate(''); setSearchProduct(''); }}
-            className="btn-rojo"
-            style={{ backgroundColor: '#666', padding: '8px 12px', width: '100%', fontSize: '0.9rem' }}
-          >
-            Limpiar Filtros
-          </button>
-        </div>
-      </div>
+      .sales-container{
+        max-width:1400px;
+        margin:0 auto;
+      }
 
-      {Object.keys(salesByDate).length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#777' }}>No se encontraron ventas con estos filtros.</p>
-      ) : (
-        Object.entries(salesByDate).map(([date, sales]) => (
-          <div key={date} className="day-card" style={{ background: 'white', padding: '1.2rem', marginBottom: '1.5rem', borderRadius: '8px', borderLeft: '5px solid var(--rojo-kiai)' }}>
-            <h3 style={{ color: 'var(--verde-hoja)', borderBottom: '1px solid #eee', paddingBottom: '0.5rem', fontSize: '1.1rem' }}>📅 {date}</h3>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginTop: '0.8rem' }}>
-              {sales.map(s => (
-                <div key={s.id} style={{ display: 'flex', flexDirection: 'column', padding: '0.8rem', backgroundColor: '#fafafa', borderRadius: '6px', border: '1px solid #eee', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <strong style={{ fontSize: '0.95rem', color: '#333' }}>Orden #{s.daily_order_number || '-'}</strong>
-                    <strong style={{ color: 'var(--rojo-kiai)', fontSize: '1rem' }}>${Number(s.total_amount || 0).toFixed(2)}</strong>
-                  </div>
-                  
-                  <div style={{ fontSize: '0.85rem', color: '#555', wordBreak: 'break-word' }}>
-                    {s.items?.map(i => `${i.quantity}x ${i.product_name}`).join(', ') || 'Venta sin detalle'}
-                  </div>
+      .sales-label{
+        color:#c61d0f;
+        text-transform:uppercase;
+        letter-spacing:.2em;
+        font-size:.8rem;
+        font-weight:700;
+      }
 
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
-                    <Link 
-                      to={`/admin/ventas/${s.id}`} 
-                      style={{ textDecoration: 'none', backgroundColor: '#333', color: '#fff', padding: '5px 10px', borderRadius: '4px', fontSize: '0.8rem', display: 'inline-block' }}
-                    >
-                      👁️ Ver detalle
-                    </Link>
-                  </div>
-                </div>
-              ))}
+      .sales-title{
+        color:#891411;
+        font-size:clamp(2.5rem,5vw,4.8rem);
+        line-height:.9;
+        font-weight:900;
+        margin:.3rem 0 1.5rem;
+      }
+
+      .filters-card{
+        background:white;
+        border-radius:20px;
+        padding:18px;
+        margin-bottom:20px;
+        box-shadow:0 8px 25px rgba(0,0,0,.05);
+      }
+
+      .filters-grid{
+        display:grid;
+        grid-template-columns:2fr 1fr 1fr auto;
+        gap:12px;
+        align-items:end;
+      }
+
+      .filter-group{
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+      }
+
+      .filter-group label{
+        font-size:.75rem;
+        text-transform:uppercase;
+        letter-spacing:.08em;
+        color:#777;
+      }
+
+      .filter-input{
+        height:48px;
+        border:1px solid #ddd;
+        border-radius:12px;
+        padding:0 14px;
+      }
+
+      .clear-btn{
+        height:48px;
+        padding:0 18px;
+        border:none;
+        border-radius:12px;
+        background:#666;
+        color:white;
+        cursor:pointer;
+        font-weight:700;
+      }
+
+      .stats-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+        gap:14px;
+        margin-bottom:20px;
+      }
+
+      .stat-card{
+        background:white;
+        border-radius:18px;
+        padding:16px;
+        box-shadow:0 8px 25px rgba(0,0,0,.05);
+      }
+
+      .stat-value{
+        font-size:2rem;
+        font-weight:900;
+        color:#c61d0f;
+        line-height:1;
+      }
+
+      .stat-label-text{
+        margin-top:6px;
+        color:#888;
+        font-size:.75rem;
+        text-transform:uppercase;
+      }
+
+      .day-card{
+        background:white;
+        border-radius:24px;
+        padding:20px;
+        box-shadow:0 8px 25px rgba(0,0,0,.05);
+        margin-bottom:20px;
+      }
+
+      .day-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-bottom:16px;
+      }
+
+      .day-title{
+        color:#891411;
+        font-size:1.3rem;
+        font-weight:800;
+      }
+
+      .day-summary{
+        background:linear-gradient(
+          135deg,
+          #891411,
+          #c61d0f
+        );
+        color:white;
+        padding:10px 16px;
+        border-radius:14px;
+        font-weight:700;
+      }
+
+      .sales-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+        gap:14px;
+      }
+
+      .sale-card{
+        background:#fafafa;
+        border:1px solid #eee;
+        border-radius:16px;
+        padding:14px;
+      }
+
+      .sale-card-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:10px;
+      }
+
+      .sale-order{
+        font-weight:800;
+        color:#891411;
+      }
+
+      .sale-total{
+        font-weight:900;
+        color:#c61d0f;
+        font-size:1.1rem;
+      }
+
+      .sale-products{
+        color:#666;
+        font-size:.9rem;
+        line-height:1.5;
+        min-height:50px;
+      }
+
+      .detail-btn{
+        display:inline-block;
+        margin-top:12px;
+        text-decoration:none;
+        background:#891411;
+        color:white;
+        padding:8px 12px;
+        border-radius:10px;
+        font-size:.85rem;
+        font-weight:700;
+      }
+
+      .detail-btn:hover{
+        background:#c61d0f;
+      }
+
+      .day-total{
+        margin-top:16px;
+        padding-top:12px;
+        border-top:1px solid #eee;
+        text-align:right;
+        font-size:1.2rem;
+        font-weight:900;
+        color:#c61d0f;
+      }
+
+      .empty-state{
+        text-align:center;
+        padding:40px 20px;
+        color:#777;
+      }
+
+      @media(max-width:768px){
+
+        .sales-page{
+          padding:12px;
+        }
+
+        .sales-title{
+          font-size:2.6rem;
+        }
+
+        .filters-grid{
+          grid-template-columns:1fr;
+        }
+
+        .sales-grid{
+          grid-template-columns:1fr;
+        }
+
+        .day-header{
+          flex-direction:column;
+          align-items:flex-start;
+        }
+
+        .day-summary{
+          width:100%;
+          text-align:center;
+        }
+      }
+    `}</style>
+
+    <div className="sales-page">
+      <div className="sales-container">
+
+        <div className="sales-label">
+          Administración
+        </div>
+
+        <h1 className="sales-title">
+          RESUMEN
+          <br />
+          DE VENTAS
+        </h1>
+
+        <div className="filters-card">
+          <div className="filters-grid">
+
+            <div className="filter-group">
+              <label>Buscar producto</label>
+              <input
+                className="filter-input"
+                type="text"
+                placeholder="Ej. Cheesecake..."
+                value={searchProduct}
+                onChange={(e) =>
+                  setSearchProduct(e.target.value)
+                }
+              />
             </div>
-            
-            <p style={{ textAlign: 'right', fontWeight: 'bold', color: 'var(--rojo-kiai)', fontSize: '1.1rem', marginTop: '1rem', borderTop: '1px solid #eee', paddingTop: '8px' }}>
-              Total del día: ${sales.reduce((sum, s) => sum + Number(s.total_amount || 0), 0).toFixed(2)}
-            </p>
+
+            <div className="filter-group">
+              <label>Desde</label>
+              <input
+                className="filter-input"
+                type="date"
+                value={startDate}
+                onChange={(e) =>
+                  setStartDate(e.target.value)
+                }
+              />
+            </div>
+
+            <div className="filter-group">
+              <label>Hasta</label>
+              <input
+                className="filter-input"
+                type="date"
+                value={endDate}
+                onChange={(e) =>
+                  setEndDate(e.target.value)
+                }
+              />
+            </div>
+
+            <button
+              className="clear-btn"
+              onClick={() => {
+                setStartDate('');
+                setEndDate('');
+                setSearchProduct('');
+              }}
+            >
+              Limpiar
+            </button>
+
           </div>
-        ))
-      )}
+        </div>
+
+        <div className="stats-grid">
+
+          <div className="stat-card">
+            <div className="stat-value">
+              {filteredSales.length}
+            </div>
+            <div className="stat-label-text">
+              Ventas
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-value">
+              $
+              {filteredSales
+                .reduce(
+                  (sum, s) =>
+                    sum + Number(s.total_amount || 0),
+                  0
+                )
+                .toFixed(0)}
+            </div>
+            <div className="stat-label-text">
+              Total vendido
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-value">
+              {Object.keys(salesByDate).length}
+            </div>
+            <div className="stat-label-text">
+              Días
+            </div>
+          </div>
+
+        </div>
+
+        {Object.keys(salesByDate).length === 0 ? (
+          <div className="empty-state">
+            No se encontraron ventas con estos filtros.
+          </div>
+        ) : (
+          Object.entries(salesByDate).map(
+            ([date, sales]) => (
+              <div
+                key={date}
+                className="day-card"
+              >
+                <div className="day-header">
+
+                  <div className="day-title">
+                    📅 {date}
+                  </div>
+
+                  <div className="day-summary">
+                    {sales.length} órdenes
+                  </div>
+
+                </div>
+
+                <div className="sales-grid">
+
+                  {sales.map((sale) => (
+                    <div
+                      key={sale.id}
+                      className="sale-card"
+                    >
+                      <div className="sale-card-header">
+
+                        <div className="sale-order">
+                          Orden #
+                          {sale.daily_order_number ||
+                            "-"}
+                        </div>
+
+                        <div className="sale-total">
+                          $
+                          {Number(
+                            sale.total_amount || 0
+                          ).toFixed(2)}
+                        </div>
+
+                      </div>
+
+                      <div className="sale-products">
+                        {sale.items?.map(
+                          (item) =>
+                            `${item.quantity}x ${item.product_name}`
+                        ).join(", ") ||
+                          "Venta sin detalle"}
+                      </div>
+
+                      <Link
+                        to={`/admin/ventas/${sale.id}`}
+                        className="detail-btn"
+                      >
+                        👁️ Ver detalle
+                      </Link>
+                    </div>
+                  ))}
+
+                </div>
+
+                <div className="day-total">
+                  Total del día: $
+                  {sales
+                    .reduce(
+                      (sum, s) =>
+                        sum +
+                        Number(
+                          s.total_amount || 0
+                        ),
+                      0
+                    )
+                    .toFixed(2)}
+                </div>
+              </div>
+            )
+          )
+        )}
+      </div>
     </div>
-  );
-}
+  </>
+);
