@@ -16,12 +16,7 @@ const App: React.FC = () => {
     <div className="app-root flex flex-col min-h-screen w-full">
       <Header />
       {/* Se eliminó la clase 'container' y el padding restrictivo */}
-      <main
-  className="flex-1 w-full flex flex-col"
-  style={{
-    paddingTop: "90px"
-  }}
->
+     <main className="flex-1 w-full flex flex-col" style={{ paddingTop: "90px" }}>
         <Routes>
           {/* Rutas Públicas */}
           <Route path="/" element={<Home />} />
