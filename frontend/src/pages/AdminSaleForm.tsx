@@ -252,31 +252,25 @@ export default function AdminSaleForm() {
         }
 
         .products-grid{
-          display:grid;
-          grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-          gap:18px;
-        }
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
 
-        .product-card{
-          background:white;
-          border-radius:24px;
-          padding:20px;
-          box-shadow:0 8px 25px rgba(0,0,0,.05);
-        }
 
+.product-card{
+  background:white;
+  border-radius:18px;
+  padding:14px;
+}
         .product-name{
-          margin:0;
-          color:#891411;
-          font-size:1.25rem;
-          font-weight:800;
-        }
+  font-size:1rem;
+}
 
-        .product-price{
-          margin:10px 0;
-          color:#c61d0f;
-          font-size:2rem;
-          font-weight:900;
-        }
+.product-price{
+  font-size:1.5rem;
+  margin:6px 0;
+}
 
         .section-label{
           font-size:.75rem;
@@ -293,14 +287,10 @@ export default function AdminSaleForm() {
           margin-bottom:16px;
         }
 
-        .topping-chip{
-          border:none;
-          cursor:pointer;
-          padding:8px 12px;
-          border-radius:999px;
-          background:#fef1e4;
-          font-size:.85rem;
-        }
+.topping-chip{
+  padding:6px 10px;
+  font-size:.75rem;
+}
 
         .topping-chip.active{
           background:#891411;
@@ -314,13 +304,10 @@ export default function AdminSaleForm() {
           margin-top:12px;
         }
 
-        .qty-input{
-          width:80px;
-          text-align:center;
-          border-radius:12px;
-          border:1px solid #ddd;
-          padding:10px;
-        }
+.qty-input{
+  width:60px;
+  padding:6px;
+}
 
         .add-btn{
           width:100%;
