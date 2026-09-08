@@ -1,38 +1,226 @@
+import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 left-0 w-full z-50 px-6 py-3 bg-[#fef1e4]/95 backdrop-blur-md border-b-[3px] border-[#891411] shadow-sm flex flex-wrap justify-between items-center gap-4 box-border">
-      <a
-        href="/"
-        className="group flex items Fresita Logo"
-          classwrap font-['Nunito',sans-serif]">
-        <a
-          href="/admin"
-          className="header-navigation-link px-5 py-2 text-[#fef1e4] font-bold rounded-full shadow hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm sm:text-base bgnsition-all hover:-translate-y-0.5 text-sm sm:text-base bg-[#c61d0f] hover:brightness-110 no-underline100%;
+    <>
+      <style>{`
+        .kiai-header,
+        .kiai-header * {
+          box-sizing: border-box;
+        }
+
+        .kiai-header {
+          position: sticky;
+          top: 0;
+          left: 0;
+          z-index: 50;
+
+          display: flex;
+          width: 100%;
+          min-height: 88px;
+          padding: 10px 24px;
+
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+
+          background: rgba(254, 241, 228, 0.96);
+          border-bottom: 3px solid #891411;
+
+          box-shadow: 0 4px 16px rgba(137, 20, 17, 0.08);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+        }
+
+        .kiai-header-logo-link {
+          display: inline-flex;
+          flex: 0 0 auto;
+          align-items: center;
+          justify-content: center;
+
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .kiai-header-logo {
+          display: block;
+          width: auto;
+          height: 64px;
+          object-fit: contain;
+
+          transition: transform 0.2s ease;
+        }
+
+        .kiai-header-logo-link:hover .kiai-header-logo {
+          transform: scale(1.04);
+        }
+
+        .kiai-header-navigation {
+          display: flex;
+          min-width: 0;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 12px;
+        }
+
+        .kiai-header-link {
+          display: inline-flex;
+          min-height: 42px;
+          padding: 9px 18px;
+
+          align-items: center;
+          justify-content: center;
+
+          color: #fef1e4;
+          border: 1px solid transparent;
+          border-radius: 999px;
+
+          font-family: "Nunito", Arial, Helvetica, sans-serif;
+          font-size: 0.9rem;
+          font-weight: 800;
+          line-height: 1.1;
+          text-align: center;
+          text-decoration: none;
+          white-space: nowrap;
+
+          box-shadow: 0 5px 12px rgba(137, 20, 17, 0.14);
+
+          transition:
+            background 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+        }
+
+        .kiai-header-link-admin {
+          background: #891411;
+        }
+
+        .kiai-header-link-sales {
+          background: #c61d0f;
+        }
+
+        .kiai-header-link:hover {
+          color: #ffffff;
+          box-shadow: 0 8px 16px rgba(137, 20, 17, 0.2);
+          transform: translateY(-1px);
+        }
+
+        .kiai-header-link-admin:hover {
+          background: #a41612;
+        }
+
+        .kiai-header-link-sales:hover {
+          background: #dd281a;
+        }
+
+        .kiai-header-link:focus-visible,
+        .kiai-header-logo-link:focus-visible {
+          outline: 3px solid rgba(198, 29, 15, 0.3);
+          outline-offset: 3px;
+        }
+
+        @media (max-width: 600px) {
+          .kiai-header {
+            min-height: auto;
+            padding: 9px 14px;
+
+            align-items: center;
+            gap: 10px;
+          }
+
+          .kiai-header-logo {
+            height: 54px;
+          }
+
+          .kiai-header-navigation {
+            flex: 1 1 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 8px;
           }
 
-          .header-navigation-link {
-            display: flex;
+          .kiai-header-link {
             min-width: 0;
-            padding: 9px 8px;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.78rem;
-            text-align: center;
-            white-space: nowrap;
+            min-height: 38px;
+            padding: 7px 10px;
+
+            font-size: 0.76rem;
+            white-space: normal;
           }
         }
 
-        @media (max-width: 350px) {
-          .header-navigation {
+        @media (max-width: 390px) {
+          .kiai-header {
+            padding: 8px 10px;
+            gap: 8px;
+          }
+
+          .kiai-header-logo {
+            height: 48px;
+          }
+
+          .kiai-header-navigation {
+            gap: 6px;
+          }
+
+          .kiai-header-link {
+            min-height: 36px;
+            padding: 6px 7px;
+            font-size: 0.68rem;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .kiai-header {
+            align-items: flex-start;
+          }
+
+          .kiai-header-logo {
+            height: 44px;
+          }
+
+          .kiai-header-navigation {
             grid-template-columns: 1fr;
           }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          .kiai-header-logo,
+          .kiai-header-link {
+            transition: none;
+          }
+        }
       `}</style>
-    </header>
+
+      <header className="kiai-header">
+        <Link
+          to="/"
+          className="kiai-header-logo-link"
+          aria-label="Ir al inicio de Kiai Fresita"
+        >
+          <img
+            srck>
+
+        <nav
+          className="kiai-header-navigation"
+          aria-label="Navegación administrativa"
+        >
+          <Link
+            to="/admin"
+            className="kiai-header-link kiai-header-link-admin"
+          >
+            Panel Admin
+          </Link>
+
+          <Link
+            to="/admin/ventas"
+            className="kiai-header-link kiai-header-link-sales"
+          >
+            Resumen Ventas
+          </Link>
+        </nav>
+      </header>
+    </>
   );
 }
