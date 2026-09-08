@@ -161,14 +161,11 @@ export default function Home() {
   width: 100%;
   min-height: calc(100svh - 90px);
   overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 73% 47%,
-      rgba(198, 29, 15, 0.07),
-      transparent 30%
-    ),
-    var(--home-surface);
-        }
+
+  background-color: #fef1e4;
+
+  color: var(--home-ink);
+}
 
         .home-stage {
           position: relative;
@@ -684,12 +681,18 @@ export default function Home() {
           Móvil
         */
 
-        @media (max-width: 768px) {
-          .home-page {
-            min-height: auto;
-            overflow: visible;
-            background: var(--home-surface);
-          }
+@media (max-width: 768px) {
+  .home-page {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    background: none;
+    background-color: #fef1e4;
+  }
+}
 
           .home-stage {
             display: flex;
