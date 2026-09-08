@@ -157,7 +157,8 @@ const hasActiveFilters =
 const toggleDay = (date: string) => {
   setExpandedDays((previousDays) => ({
     ...previousDays,
-    !previousDays[date],
+    [date]: !previousDays[date],
+ 
   }));
 };
 
