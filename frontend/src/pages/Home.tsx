@@ -407,7 +407,11 @@ min-height: 55vh;
 
 
 .support-copy {
-  bottom: 22vh;
+position: absolute;
+bottom: 14vh;
+width: 42vw;
+font-size: .9rem;
+line-height: 1.05;
 }
 
   .support-copy--left {
