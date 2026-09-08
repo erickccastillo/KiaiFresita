@@ -377,22 +377,30 @@ export default function Home() {
           }
         }
 
-        /* Responsive */
+/* Responsive */
 @media (max-width: 768px) {
 
-  .stage {
-padding-top: 100px;
-min-height: 55vh;
-}
   .viewport {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background: var(--surface);
-}
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--surface);
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+
+    padding-top: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    min-height: calc(100vh - 170px);
+  }
 
   .brand-word {
     position: relative;
+
     top: 0;
     left: 0;
 
@@ -403,26 +411,40 @@ min-height: 55vh;
     font-size: clamp(4rem, 17vw, 5.5rem);
 
     line-height: .85;
+
+    margin-bottom: auto;
   }
 
+  .support-copy {
+    position: static;
 
-.support-copy {
-position: absolute;
-bottom: 14vh;
-width: 42vw;
-font-size: .9rem;
-line-height: 1.05;
-}
+    width: auto;
 
-  .support-copy--left {
-    left: 5vw;
+    font-size: .95rem;
+
+    line-height: 1.05;
+  }
+
+  .support-copy--left,
+  .support-copy--right {
+    left: auto;
+    right: auto;
   }
 
   .support-copy--right {
-    right: 5vw;
     text-align: right;
   }
 
+  .mobile-slogans {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    margin-top: auto;
+
+    padding-bottom: 20px;
+  }
+}
 
 
 }
