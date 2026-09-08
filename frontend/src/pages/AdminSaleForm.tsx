@@ -251,25 +251,26 @@ export default function AdminSaleForm() {
           font-weight:900;
         }
 
-        .products-grid{
+.products-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
   gap:12px;
 }
 
 
 .product-card{
-  background:white;
-  border-radius:18px;
-  padding:14px;
+  padding:12px;
+  border-radius:16px;
 }
-        .product-name{
+.product-name{
   font-size:1rem;
+  margin-bottom:4px;
 }
 
+
 .product-price{
-  font-size:1.5rem;
-  margin:6px 0;
+  font-size:1.2rem;
+  margin:4px 0 8px;
 }
 
         .section-label{
@@ -280,49 +281,38 @@ export default function AdminSaleForm() {
           margin-bottom:10px;
         }
 
-        .toppings{
-          display:flex;
-          flex-wrap:wrap;
-          gap:8px;
-          margin-bottom:16px;
-        }
+.toppings{
+  gap:6px;
+  margin-bottom:10px;
+}
 
 .topping-chip{
-  padding:6px 10px;
-  font-size:.75rem;
+  padding:4px 8px;
+  font-size:.70rem;
 }
+
 
         .topping-chip.active{
           background:#891411;
           color:white;
         }
 
-        .quantity-row{
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          margin-top:12px;
-        }
-
-.qty-input{
-width:80px;
-text-align:center;
-border-radius:12px;
-border:1px solid #ddd;
-padding:10px;
+.quantity-row{
+  margin-top:8px;
 }
 
-        .add-btn{
-          width:100%;
-          margin-top:15px;
-          border:none;
-          border-radius:14px;
-          padding:13px;
-          background:#891411;
-          color:white;
-          cursor:pointer;
-          font-weight:700;
-        }
+.qty-input{
+  width:55px;
+  padding:4px;
+  height:36px;
+}
+
+ .add-btn{
+  margin-top:10px;
+  padding:9px;
+  font-size:.85rem;
+}
+
 
         .add-btn:hover{
           background:#c61d0f;
@@ -386,28 +376,46 @@ padding:10px;
           background:#c61d0f;
         }
 
-        @media(max-width:768px){
+       @media(max-width:768px){
 
-          .sale-page{
-            padding:16px;
-          }
+  .sale-page{
+    padding:10px;
+  }
 
-          .sale-title{
-            font-size:3rem;
-          }
+  .sale-title{
+    font-size:2.2rem;
+    margin-bottom:1rem;
+  }
 
-          .products-grid{
-            grid-template-columns:1fr;
-          }
+  .products-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
 
-          .cart-item{
-            flex-direction:column;
-          }
+  .product-card{
+    padding:10px;
+  }
 
-          .total-price{
-            font-size:2.5rem;
-          }
-        }
+  .product-name{
+    font-size:.95rem;
+  }
+
+  .product-price{
+    font-size:1.1rem;
+  }
+
+  .topping-chip{
+    font-size:.65rem;
+    padding:3px 7px;
+  }
+
+  .add-btn{
+    height:40px;
+    font-size:.8rem;
+  }
+
+}
+
       `}</style>
 
       <div className="sale-page">
