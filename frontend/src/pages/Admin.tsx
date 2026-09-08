@@ -47,206 +47,219 @@ export default function AdminDashboard() {
   return (
     <>
       <style>{`
-        .dashboard {
-          min-height: 100vh;
-          background: #fef1e4;
-          padding: 2rem;
-        }
+.dashboard {
+  min-height: 100vh;
+  background: #fef1e4;
+  padding: 1.25rem;
+}
 
-        .dashboard-container {
-          max-width: 1400px;
-          margin: 0 auto;
-        }
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
 
-        .hero {
-          margin-bottom: 3rem;
-        }
+.hero {
+  margin-bottom: 1.25rem;
+}
 
-        .hero-label {
-          color: #c61d0f;
-          text-transform: uppercase;
-          letter-spacing: .25em;
-          font-weight: 700;
-          margin-bottom: .5rem;
-        }
+.hero-label {
+  color: #c61d0f;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  font-weight: 700;
+  margin-bottom: .25rem;
+  font-size: .8rem;
+}
 
-        .hero-title {
-          font-size: clamp(3rem, 9vw, 8rem);
-          line-height: .85;
-          font-weight: 900;
-          color: #891411;
-          margin: 0;
-        }
+.hero-title {
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  line-height: .9;
+  font-weight: 900;
+  color: #891411;
+  margin: 0;
+}
 
-        .hero-subtitle {
-          margin-top: 1rem;
-          color: #666;
-          font-size: 1.1rem;
-        }
+.hero-subtitle {
+  margin-top: .5rem;
+  color: #666;
+  font-size: .95rem;
+}
 
-        .search-box {
-          margin: 2.5rem 0;
-        }
+.search-box {
+  margin: 1.25rem 0;
+}
 
-        .search-input {
-          width: 100%;
-          height: 68px;
-          border: none;
-          outline: none;
-          border-radius: 999px;
-          padding: 0 24px;
-          font-size: 1rem;
-          background: white;
-          box-shadow: 0 10px 30px rgba(0,0,0,.05);
-        }
+.search-input {
+  width: 100%;
+  height: 56px;
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  padding: 0 20px;
+  font-size: .95rem;
+  background: white;
+  box-shadow: 0 8px 18px rgba(0,0,0,.04);
+}
 
-        .action-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-          gap: 1rem;
-          margin-bottom: 2rem;
-        }
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: .85rem;
+  margin-bottom: 1.25rem;
+}
 
-        .action-card {
-          background: white;
-          border-radius: 24px;
-          padding: 1.5rem;
-          text-decoration: none;
-          color: #891411;
-          transition: .25s;
-          box-shadow: 0 10px 25px rgba(0,0,0,.05);
-        }
+.action-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: #891411;
+  transition: .2s;
+  box-shadow: 0 8px 18px rgba(0,0,0,.04);
+}
 
-        .action-card:hover {
-          transform: translateY(-4px);
-        }
+.action-card:hover {
+  transform: translateY(-3px);
+}
 
-        .action-card span {
-          display: block;
-          color: #999;
-          font-size: .8rem;
-          margin-bottom: .5rem;
-          text-transform: uppercase;
-        }
+.action-card span {
+  display: block;
+  color: #999;
+  font-size: .72rem;
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+}
 
-        .action-card strong {
-          display: block;
-          font-size: 1.4rem;
-        }
+.action-card strong {
+  display: block;
+  font-size: 1.2rem;
+}
 
-        .stats {
-          display: grid;
-          grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-          gap: 1rem;
-          margin-bottom: 3rem;
-        }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: .85rem;
+  margin-bottom: 1.5rem;
+}
 
-        .stat-card {
-          background: white;
-          border-radius: 24px;
-          padding: 1.5rem;
-          box-shadow: 0 10px 25px rgba(0,0,0,.05);
-        }
+.stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 18px rgba(0,0,0,.04);
+}
 
-        .stat-number {
-          font-size: clamp(2rem,5vw,4rem);
-          font-weight: 900;
-          color: #c61d0f;
-          line-height: 1;
-        }
+.stat-number {
+  font-size: clamp(2rem,3vw,3rem);
+  font-weight: 900;
+  color: #c61d0f;
+  line-height: 1;
+}
 
-        .stat-label {
-          margin-top: .5rem;
-          color: #777;
-          text-transform: uppercase;
-          letter-spacing: .1em;
-          font-size: .8rem;
-        }
+.stat-label {
+  margin-top: .35rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .72rem;
+}
 
-        .products-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-          gap: 1.25rem;
-        }
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+  gap: 1rem;
+}
 
-        .product-card {
-          background: white;
-          border-radius: 28px;
-          padding: 1.5rem;
-          box-shadow: 0 10px 25px rgba(0,0,0,.05);
-          transition: .25s;
-        }
+.product-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 8px 18px rgba(0,0,0,.04);
+  transition: .2s;
+}
 
-        .product-card:hover {
-          transform: translateY(-5px);
-        }
+.product-card:hover {
+  transform: translateY(-4px);
+}
 
-        .product-category {
-          font-size: .75rem;
-          color: #999;
-          text-transform: uppercase;
-          letter-spacing: .1em;
-          margin-bottom: .75rem;
-        }
+.product-category {
+  font-size: .72rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .5rem;
+}
 
-        .product-name {
-          font-size: 1.2rem;
-          font-weight: 800;
-          color: #891411;
-          margin-bottom: 1rem;
-        }
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #891411;
+  margin-bottom: .75rem;
+  min-height: 52px;
+}
 
-        .product-price {
-          font-size: 1.8rem;
-          font-weight: 900;
-          color: #c61d0f;
-          margin-bottom: 1.25rem;
-        }
+.product-price {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #c61d0f;
+  margin-bottom: 1rem;
+}
 
-        .edit-btn {
-          display: block;
-          text-align: center;
-          background: #891411;
-          color: white;
-          text-decoration: none;
-          padding: .85rem;
-          border-radius: 14px;
-          font-weight: 700;
-          transition: .25s;
-        }
+.edit-btn {
+  display: block;
+  text-align: center;
+  background: #891411;
+  color: white;
+  text-decoration: none;
+  padding: .75rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: .9rem;
+  transition: .2s;
+}
 
-        .edit-btn:hover {
-          background: #c61d0f;
-        }
+.edit-btn:hover {
+  background: #c61d0f;
+}
 
-        .empty-state,
-        .loading-state {
-          text-align: center;
-          padding: 4rem 1rem;
-          color: #666;
-        }
+.empty-state,
+.loading-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+}
 
-        .error-state {
-          text-align: center;
-          padding: 2rem;
-          color: #c61d0f;
-          font-weight: bold;
-        }
+.error-state {
+  text-align: center;
+  padding: 1rem;
+  color: #c61d0f;
+  font-weight: bold;
+}
 
-        @media(max-width:768px){
-          .dashboard{
-            padding:1rem;
-          }
+@media (max-width: 768px) {
 
-          .hero{
-            text-align:center;
-          }
+  .dashboard {
+    padding: .85rem;
+  }
 
-          .hero-title{
-            font-size:4rem;
-          }
-        }
-      `}</style>
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: .9rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-name {
+    min-height: auto;
+  }
+}
+`}</style>
+
 
       <div className="dashboard">
         <div className="dashboard-container">
@@ -255,9 +268,7 @@ export default function AdminDashboard() {
             <div className="hero-label">Administración</div>
 
             <h1 className="hero-title">
-              KIAI
-              <br />
-              CONTROL
+              KIAI CONTROL
             </h1>
 
             <p className="hero-subtitle">
