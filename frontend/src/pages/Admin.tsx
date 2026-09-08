@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/products`)
@@ -21,7 +22,8 @@ export default function AdminDashboard() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error("Error al cargar productos:", err);
+        console.error(err);
+        setError("No fue posible cargar los productos.");
         setIsLoading(false);
       });
   }, []);
@@ -42,321 +44,306 @@ export default function AdminDashboard() {
       });
   }, [products, query]);
 
-  const averagePrice =
-    products.length > 0
-      ? products.reduce((acc, item) => acc + Number(item.price), 0) /
-        products.length
-      : 0;
-
   return (
-    <div
-      style={{
-        maxWidth: "1400px",
-        margin: "0 auto",
-        padding: "24px",
-      }}
-    >
-      {/* HERO */}
+    <>
+      <style>{`
+        .dashboard {
+          min-height: 100vh;
+          background: #fef1e4;
+          padding: 2rem;
+        }
 
-      <div
-        style={{
-          background:
-            "linear-gradient(135deg,var(--rojo-kiai),#891411)",
-          borderRadius: "28px",
-          padding: "32px",
-          color: "white",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "20px",
-          marginBottom: "24px",
-          boxShadow: "0 15px 40px rgba(0,0,0,.15)",
-        }}
-      >
-        <div>
-          <p
-            style={{
-              margin: 0,
-              opacity: 0.8,
-              letterSpacing: "1px",
-              textTransform: "uppercase",
-            }}
-          >
-            Administración
-          </p>
+        .dashboard-container {
+          max-width: 1400px;
+          margin: 0 auto;
+        }
 
-          <h1
-            style={{
-              margin: "8px 0 0",
-              fontSize: "clamp(2rem,5vw,3rem)",
-            }}
-          >
-            🥋 Panel de Control
-          </h1>
-        </div>
+        .hero {
+          margin-bottom: 3rem;
+        }
 
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link
-            to="/admin/new-sale"
-            style={{
-              padding: "12px 18px",
-              borderRadius: "14px",
-              background: "#ffffff",
-              color: "#891411",
-              textDecoration: "none",
-              fontWeight: 700,
-            }}
-          >
-            ➕ Nueva Venta
-          </Link>
+        .hero-label {
+          color: #c61d0f;
+          text-transform: uppercase;
+          letter-spacing: .25em;
+          font-weight: 700;
+          margin-bottom: .5rem;
+        }
 
-          <Link
-            to="/admin/new"
-            style={{
-              padding: "12px 18px",
-              borderRadius: "14px",
-              background: "rgba(255,255,255,.15)",
-              border: "1px solid rgba(255,255,255,.3)",
-              color: "white",
-              textDecoration: "none",
-              fontWeight: 700,
-              backdropFilter: "blur(16px)",
-            }}
-          >
-            📦 Nuevo Producto
-          </Link>
-        </div>
-      </div>
+        .hero-title {
+          font-size: clamp(3rem, 9vw, 8rem);
+          line-height: .85;
+          font-weight: 900;
+          color: #891411;
+          margin: 0;
+        }
 
-      {/* STATS */}
+        .hero-subtitle {
+          margin-top: 1rem;
+          color: #666;
+          font-size: 1.1rem;
+        }
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-          gap: "16px",
-          marginBottom: "24px",
-        }}
-      >
-        <div
-          style={{
-            background: "white",
-            borderRadius: "24px",
-            padding: "22px",
-            boxShadow: "0 10px 30px rgba(0,0,0,.05)",
-          }}
-        >
-          <div style={{ color: "#888" }}>Productos</div>
-          <div
-            style={{
-              fontSize: "2rem",
-              fontWeight: 800,
-              color: "var(--rojo-kiai)",
-            }}
-          >
-            {products.length}
+        .search-box {
+          margin: 2.5rem 0;
+        }
+
+        .search-input {
+          width: 100%;
+          height: 68px;
+          border: none;
+          outline: none;
+          border-radius: 999px;
+          padding: 0 24px;
+          font-size: 1rem;
+          background: white;
+          box-shadow: 0 10px 30px rgba(0,0,0,.05);
+        }
+
+        .action-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .action-card {
+          background: white;
+          border-radius: 24px;
+          padding: 1.5rem;
+          text-decoration: none;
+          color: #891411;
+          transition: .25s;
+          box-shadow: 0 10px 25px rgba(0,0,0,.05);
+        }
+
+        .action-card:hover {
+          transform: translateY(-4px);
+        }
+
+        .action-card span {
+          display: block;
+          color: #999;
+          font-size: .8rem;
+          margin-bottom: .5rem;
+          text-transform: uppercase;
+        }
+
+        .action-card strong {
+          display: block;
+          font-size: 1.4rem;
+        }
+
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+          gap: 1rem;
+          margin-bottom: 3rem;
+        }
+
+        .stat-card {
+          background: white;
+          border-radius: 24px;
+          padding: 1.5rem;
+          box-shadow: 0 10px 25px rgba(0,0,0,.05);
+        }
+
+        .stat-number {
+          font-size: clamp(2rem,5vw,4rem);
+          font-weight: 900;
+          color: #c61d0f;
+          line-height: 1;
+        }
+
+        .stat-label {
+          margin-top: .5rem;
+          color: #777;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+          font-size: .8rem;
+        }
+
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+          gap: 1.25rem;
+        }
+
+        .product-card {
+          background: white;
+          border-radius: 28px;
+          padding: 1.5rem;
+          box-shadow: 0 10px 25px rgba(0,0,0,.05);
+          transition: .25s;
+        }
+
+        .product-card:hover {
+          transform: translateY(-5px);
+        }
+
+        .product-category {
+          font-size: .75rem;
+          color: #999;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+          margin-bottom: .75rem;
+        }
+
+        .product-name {
+          font-size: 1.2rem;
+          font-weight: 800;
+          color: #891411;
+          margin-bottom: 1rem;
+        }
+
+        .product-price {
+          font-size: 1.8rem;
+          font-weight: 900;
+          color: #c61d0f;
+          margin-bottom: 1.25rem;
+        }
+
+        .edit-btn {
+          display: block;
+          text-align: center;
+          background: #891411;
+          color: white;
+          text-decoration: none;
+          padding: .85rem;
+          border-radius: 14px;
+          font-weight: 700;
+          transition: .25s;
+        }
+
+        .edit-btn:hover {
+          background: #c61d0f;
+        }
+
+        .empty-state,
+        .loading-state {
+          text-align: center;
+          padding: 4rem 1rem;
+          color: #666;
+        }
+
+        .error-state {
+          text-align: center;
+          padding: 2rem;
+          color: #c61d0f;
+          font-weight: bold;
+        }
+
+        @media(max-width:768px){
+          .dashboard{
+            padding:1rem;
+          }
+
+          .hero{
+            text-align:center;
+          }
+
+          .hero-title{
+            font-size:4rem;
+          }
+        }
+      `}</style>
+
+      <div className="dashboard">
+        <div className="dashboard-container">
+
+          <section className="hero">
+            <div className="hero-label">Administración</div>
+
+            <h1 className="hero-title">
+              KIAI
+              <br />
+              CONTROL
+            </h1>
+
+            <p className="hero-subtitle">
+              Gestiona productos, ventas y catálogo desde un solo lugar.
+            </p>
+          </section>
+
+          <div className="search-box">
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Buscar productos..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
-        </div>
 
-        <div
-          style={{
-            background: "white",
-            borderRadius: "24px",
-            padding: "22px",
-            boxShadow: "0 10px 30px rgba(0,0,0,.05)",
-          }}
-        >
-          <div style={{ color: "#888" }}>Resultados</div>
-          <div
-            style={{
-              fontSize: "2rem",
-              fontWeight: 800,
-              color: "var(--verde-hoja)",
-            }}
-          >
-            {filteredProducts.length}
+          <div className="action-grid">
+            <Link to="/admin/new-sale" className="action-card">
+              <span>Ventas</span>
+              <strong>➕ Nueva Venta</strong>
+            </Link>
+
+            <Link to="/admin/new" className="action-card">
+              <span>Inventario</span>
+              <strong>📦 Nuevo Producto</strong>
+            </Link>
           </div>
-        </div>
 
-        <div
-          style={{
-            background: "white",
-            borderRadius: "24px",
-            padding: "22px",
-            boxShadow: "0 10px 30px rgba(0,0,0,.05)",
-          }}
-        >
-          <div style={{ color: "#888" }}>Precio Promedio</div>
-          <div
-            style={{
-              fontSize: "2rem",
-              fontWeight: 800,
-              color: "#333",
-            }}
-          >
-            ${averagePrice.toFixed(2)}
+          <div className="stats">
+            <div className="stat-card">
+              <div className="stat-number">{products.length}</div>
+              <div className="stat-label">Productos</div>
+            </div>
+
+            <div className="stat-card">
+              <div className="stat-number">{filteredProducts.length}</div>
+              <div className="stat-label">Resultados</div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* SEARCH */}
+          {error && (
+            <div className="error-state">
+              {error}
+            </div>
+          )}
 
-      <div
-        style={{
-          background: "white",
-          padding: "18px",
-          borderRadius: "24px",
-          boxShadow: "0 10px 30px rgba(0,0,0,.05)",
-          marginBottom: "24px",
-        }}
-      >
-        <input
-          type="text"
-          placeholder="🔎 Buscar productos..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "16px 18px",
-            borderRadius: "16px",
-            border: "1px solid #ddd",
-            fontSize: "1rem",
-            outline: "none",
-          }}
-        />
-      </div>
-
-      {/* DESKTOP TABLE */}
-
-      <div
-        className="desktop-table"
-        style={{
-          background: "white",
-          borderRadius: "24px",
-          overflow: "hidden",
-          boxShadow: "0 10px 30px rgba(0,0,0,.05)",
-        }}
-      >
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-          <thead>
-            <tr
-              style={{
-                background: "#fafafa",
-              }}
-            >
-              <th style={{ padding: "18px", textAlign: "left" }}>
-                Producto
-              </th>
-              <th style={{ padding: "18px", textAlign: "left" }}>
-                Categoría
-              </th>
-              <th style={{ padding: "18px", textAlign: "left" }}>
-                Precio
-              </th>
-              <th style={{ padding: "18px", textAlign: "center" }}>
-                Acción
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={4} style={{ padding: "40px", textAlign: "center" }}>
-                  Cargando productos...
-                </td>
-              </tr>
-            ) : filteredProducts.length === 0 ? (
-              <tr>
-                <td colSpan={4} style={{ padding: "40px", textAlign: "center" }}>
-                  No se encontraron productos.
-                </td>
-              </tr>
-            ) : (
-              filteredProducts.map((product) => (
-                <tr
+          {isLoading ? (
+            <div className="loading-state">
+              Cargando productos...
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="empty-state">
+              No se encontraron productos.
+            </div>
+          ) : (
+            <div className="products-grid">
+              {filteredProducts.map((product) => (
+                <div
                   key={product.id}
-                  style={{
-                    borderTop: "1px solid #f0f0f0",
-                  }}
+                  className="product-card"
                 >
-                  <td style={{ padding: "18px", fontWeight: 600 }}>
-                    {product.name}
-                  </td>
-
-                  <td
-                    style={{
-                      padding: "18px",
-                      textTransform: "capitalize",
-                      color: "#666",
-                    }}
-                  >
+                  <div className="product-category">
                     {product.category || "Producto Base"}
-                  </td>
+                  </div>
 
-                  <td
-                    style={{
-                      padding: "18px",
-                      fontWeight: 700,
-                      color: "var(--rojo-kiai)",
-                    }}
-                  >
+                  <div className="product-name">
+                    {product.name}
+                  </div>
+
+                  <div className="product-price">
                     ${Number(product.price).toFixed(2)}
-                  </td>
+                  </div>
 
-                  <td
-                    style={{
-                      padding: "18px",
-                      textAlign: "center",
-                    }}
+                  <Link
+                    to={`/admin/edit/${product.id}`}
+                    className="edit-btn"
                   >
-                    <Link
-                      to={`/admin/edit/${product.id}`}
-                      style={{
-                        padding: "10px 14px",
-                        borderRadius: "12px",
-                        background: "#333",
-                        color: "white",
-                        textDecoration: "none",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Editar
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+                    Editar Producto
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* MOBILE CARDS */}
-
-      <div className="mobile-cards">
-        {!isLoading &&
-          filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              style={{
-                background: "white",
-                borderRadius: "22px",
-                padding: "18px",
-                marginBottom: "15px",
-                boxShadow: "0 10px 25px rgba(0,0,0,.05)",
-              }}
-            >
-              <h3
-        
+    </>
+  );
+}
