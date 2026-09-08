@@ -149,25 +149,25 @@ export default function ResumenVentas() {
 
   const totalDays = orderedSalesByDate.length;
 
-  const hasActiveFilters =
-    searchProduct.trim() !== "" ||
-    startDate !== "" ||
-    endDate !== "";
+const hasActiveFilters =
+  searchProduct.trim() !== "" ||
+  startDate !== "" ||
+  endDate !== "";
 
-  const toggleDay = (date: string) => {
-    setExpandedDays((previousDays) => ({
-      ...previousDays,
-      !previousDays[date],
-    }));
-  };
+const toggleDay = (date: string) => {
+  setExpandedDays((previousDays) => ({
+    ...previousDays,
+    !previousDays[date],
+  }));
+};
 
-  const clearFilters = () => {
-    setStartDate("");
-    setEndDate("");
-    setSearchProduct("");
-  };
+const clearFilters = () => {
+  setStartDate("");
+  setEndDate("");
+  setSearchProduct("");
+};
 
-  return (
+return (
     <>
       <style>{`
         .sales-page,
