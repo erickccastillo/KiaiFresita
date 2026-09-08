@@ -13,8 +13,7 @@ export default function Header() {
         .kiai-header {
           position: sticky;
           top: 0;
-          left: 0;
-          z-index: 50;
+          z-index: 100;
 
           display: flex;
           width: 100%;
@@ -29,6 +28,7 @@ export default function Header() {
           border-bottom: 3px solid #891411;
 
           box-shadow: 0 4px 16px rgba(137, 20, 17, 0.08);
+
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
         }
@@ -36,8 +36,11 @@ export default function Header() {
         .kiai-header-logo-link {
           display: inline-flex;
           flex: 0 0 auto;
+
           align-items: center;
           justify-content: center;
+
+          border-radius: 12px;
 
           color: inherit;
           text-decoration: none;
@@ -45,8 +48,10 @@ export default function Header() {
 
         .kiai-header-logo {
           display: block;
+
           width: auto;
           height: 64px;
+
           object-fit: contain;
 
           transition: transform 0.2s ease;
@@ -59,6 +64,7 @@ export default function Header() {
         .kiai-header-navigation {
           display: flex;
           min-width: 0;
+
           align-items: center;
           justify-content: flex-end;
           gap: 12px;
@@ -72,11 +78,17 @@ export default function Header() {
           align-items: center;
           justify-content: center;
 
-          color: #fef1e4;
           border: 1px solid transparent;
           border-radius: 999px;
 
-          font-family: "Nunito", Arial, Helvetica, sans-serif;
+          color: #fef1e4;
+
+          font-family:
+            "Nunito",
+            Arial,
+            Helvetica,
+            sans-serif;
+
           font-size: 0.9rem;
           font-weight: 800;
           line-height: 1.1;
@@ -84,34 +96,40 @@ export default function Header() {
           text-decoration: none;
           white-space: nowrap;
 
-          box-shadow: 0 5px 12px rgba(137, 20, 17, 0.14);
+          box-shadow:
+            0 5px 12px
+            rgba(137, 20, 17, 0.14);
 
           transition:
-            background 0.2s ease,
+            background-color 0.2s ease,
             box-shadow 0.2s ease,
             transform 0.2s ease;
         }
 
         .kiai-header-link-admin {
-          background: #891411;
+          background-color: #891411;
         }
 
         .kiai-header-link-sales {
-          background: #c61d0f;
+          background-color: #c61d0f;
         }
 
         .kiai-header-link:hover {
           color: #ffffff;
-          box-shadow: 0 8px 16px rgba(137, 20, 17, 0.2);
+
+          box-shadow:
+            0 8px 16px
+            rgba(137, 20, 17, 0.2);
+
           transform: translateY(-1px);
         }
 
         .kiai-header-link-admin:hover {
-          background: #a41612;
+          background-color: #a41612;
         }
 
         .kiai-header-link-sales:hover {
-          background: #dd281a;
+          background-color: #dd281a;
         }
 
         .kiai-header-link:focus-visible,
@@ -124,8 +142,6 @@ export default function Header() {
           .kiai-header {
             min-height: auto;
             padding: 9px 14px;
-
-            align-items: center;
             gap: 10px;
           }
 
@@ -134,16 +150,19 @@ export default function Header() {
           }
 
           .kiai-header-navigation {
-            flex: 1 1 auto;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            flex: 1 1 auto;
+
+            grid-template-columns:
+              repeat(2, minmax(0, 1fr));
+
             gap: 8px;
           }
 
           .kiai-header-link {
             min-width: 0;
             min-height: 38px;
-            padding: 7px 10px;
+            padding: 7px 9px;
 
             font-size: 0.76rem;
             white-space: normal;
@@ -166,12 +185,13 @@ export default function Header() {
 
           .kiai-header-link {
             min-height: 36px;
-            padding: 6px 7px;
+            padding: 6px;
+
             font-size: 0.68rem;
           }
         }
 
-        @media (max-width: 320px) {
+        @media (max-width: 330px) {
           .kiai-header {
             align-items: flex-start;
           }
@@ -199,8 +219,8 @@ export default function Header() {
           className="kiai-header-logo-link"
           aria-label="Ir al inicio de Kiai Fresita"
         >
-          <img
-            srck>
+          {logo}
+        </Link>
 
         <nav
           className="kiai-header-navigation"
