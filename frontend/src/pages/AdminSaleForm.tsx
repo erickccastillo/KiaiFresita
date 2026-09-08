@@ -225,193 +225,291 @@ export default function AdminSaleForm() {
     <>
       <style>{`
         .sale-page{
-          background:#fef1e4;
-          width:100%;
-          padding:24px;
-        }
+  background:#fef1e4;
+  width:100%;
+  padding:20px;
+}
 
-        .sale-container{
-          max-width:1400px;
-          margin:0 auto;
-        }
+.sale-container{
+  max-width:1400px;
+  margin:0 auto;
+}
 
-        .sale-label{
-          color:#c61d0f;
-          text-transform:uppercase;
-          letter-spacing:.2em;
-          font-size:.8rem;
-          font-weight:700;
-        }
+.sale-label{
+  color:#c61d0f;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  font-size:.8rem;
+  font-weight:700;
+}
 
-        .sale-title{
-          margin:.3rem 0 2rem;
-          color:#891411;
-          font-size:clamp(2.5rem,5vw,4.5rem);
-          line-height:.9;
-          font-weight:900;
-        }
+.sale-title{
+  margin:.3rem 0 1.5rem;
+  color:#891411;
+  font-size:clamp(2.5rem,5vw,4.8rem);
+  line-height:.9;
+  font-weight:900;
+}
+
+/* PRODUCTOS */
 
 .products-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;
 }
-
 
 .product-card{
-  padding:12px;
-  border-radius:16px;
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.05);
+  transition:.2s;
 }
+
+.product-card:hover{
+  transform:translateY(-2px);
+}
+
 .product-name{
-  font-size:1rem;
+  font-size:1.15rem;
+  font-weight:800;
+  color:#891411;
   margin-bottom:4px;
 }
 
-
 .product-price{
-  font-size:1.2rem;
-  margin:4px 0 8px;
+  font-size:1.7rem;
+  font-weight:900;
+  color:#c61d0f;
+  margin:6px 0 12px;
 }
 
-        .section-label{
-          font-size:.75rem;
-          text-transform:uppercase;
-          letter-spacing:.08em;
-          color:#999;
-          margin-bottom:10px;
-        }
+.section-label{
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#999;
+  margin-bottom:8px;
+}
 
 .toppings{
-  gap:6px;
-  margin-bottom:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px;
 }
 
 .topping-chip{
-  padding:4px 8px;
-  font-size:.70rem;
+  border:none;
+  cursor:pointer;
+
+  background:#f7ebdf;
+
+  padding:7px 10px;
+
+  border-radius:999px;
+
+  font-size:.78rem;
+
+  transition:.2s;
 }
 
+.topping-chip:hover{
+  background:#efe0d2;
+}
 
-        .topping-chip.active{
-          background:#891411;
-          color:white;
-        }
+.topping-chip.active{
+  background:#891411;
+  color:white;
+}
 
 .quantity-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   margin-top:8px;
+  margin-bottom:12px;
 }
 
 .qty-input{
-  width:55px;
+  width:65px;
+  height:40px;
+
+  border-radius:10px;
+  border:1px solid #ddd;
+
+  text-align:center;
+
   padding:4px;
-  height:36px;
 }
 
- .add-btn{
-  margin-top:10px;
-  padding:9px;
-  font-size:.85rem;
+.add-btn{
+  width:100%;
+
+  height:44px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:#891411;
+
+  color:white;
+
+  font-weight:700;
+
+  font-size:.9rem;
+
+  cursor:pointer;
+
+  transition:.2s;
 }
 
+.add-btn:hover{
+  background:#c61d0f;
+}
 
-        .add-btn:hover{
-          background:#c61d0f;
-        }
+/* RESUMEN */
 
-        .order-card{
-          margin-top:24px;
-          background:white;
-          border-radius:24px;
-          padding:24px;
-          box-shadow:0 8px 25px rgba(0,0,0,.05);
-        }
+.order-card{
+  margin-top:24px;
 
-        .order-title{
-          margin-top:0;
-          color:#891411;
-        }
+  background:white;
 
-        .cart-item{
-          display:flex;
-          justify-content:space-between;
-          gap:12px;
-          padding:14px 0;
-          border-bottom:1px solid #eee;
-        }
+  border-radius:20px;
 
-        .delete-btn{
-          border:none;
-          background:none;
-          cursor:pointer;
-          font-size:1.2rem;
-        }
+  padding:20px;
 
-        .total-box{
-          background:#fef1e4;
-          border-radius:20px;
-          padding:20px;
-          margin:20px 0;
-          text-align:center;
-        }
+  box-shadow:0 8px 25px rgba(0,0,0,.05);
+}
 
-        .total-price{
-          font-size:3rem;
-          font-weight:900;
-          color:#c61d0f;
-        }
+.order-title{
+  margin-top:0;
+  margin-bottom:15px;
+  color:#891411;
+}
 
-        .checkout-btn{
-          width:100%;
-          border:none;
-          border-radius:16px;
-          padding:16px;
-          background:#891411;
-          color:white;
-          font-size:1.1rem;
-          font-weight:800;
-          cursor:pointer;
-        }
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 
-        .checkout-btn:hover{
-          background:#c61d0f;
-        }
+  gap:12px;
 
-       @media(max-width:768px){
+  padding:12px 0;
+
+  border-bottom:1px solid #eee;
+}
+
+.delete-btn{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:1.1rem;
+}
+
+.total-box{
+  background:linear-gradient(
+    135deg,
+    #891411,
+    #c61d0f
+  );
+
+  border-radius:18px;
+
+  padding:20px;
+
+  margin:20px 0;
+
+  text-align:center;
+
+  color:white;
+}
+
+.total-price{
+  font-size:3.5rem;
+  font-weight:900;
+  line-height:1;
+  color:white;
+}
+
+.checkout-btn{
+  width:100%;
+
+  height:54px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:#891411;
+
+  color:white;
+
+  font-size:1rem;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+.checkout-btn:hover{
+  background:#c61d0f;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
 
   .sale-page{
-    padding:10px;
+    padding:12px;
   }
 
   .sale-title{
-    font-size:2.2rem;
+    font-size:2.5rem;
     margin-bottom:1rem;
   }
 
   .products-grid{
     grid-template-columns:1fr;
-    gap:10px;
+    gap:12px;
   }
 
   .product-card{
-    padding:10px;
+    padding:12px;
   }
 
   .product-name{
-    font-size:.95rem;
+    font-size:1rem;
   }
 
   .product-price{
-    font-size:1.1rem;
+    font-size:1.4rem;
   }
 
   .topping-chip{
-    font-size:.65rem;
-    padding:3px 7px;
+    font-size:.72rem;
+    padding:6px 8px;
+  }
+
+  .qty-input{
+    width:60px;
+    height:38px;
   }
 
   .add-btn{
-    height:40px;
-    font-size:.8rem;
+    height:42px;
+    font-size:.85rem;
+  }
+
+  .cart-item{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .total-price{
+    font-size:2.5rem;
   }
 
 }
