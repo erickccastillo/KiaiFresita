@@ -23,40 +23,303 @@ function ProductRow({ product, availableToppings, onAdd }: { product: Product, a
   const currentToppingsCost = availableToppings.filter(t => selectedToppings.includes(t.id)).reduce((sum, t) => sum + Number(t.price), 0);
   const subtotal = ((Number(product.price) + currentToppingsCost) * quantity).toFixed(2);
 
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #eee', gap: '1rem' }}>
-      <div style={{ flex: '1 1 200px' }}>
-        <strong style={{ fontSize: '1.1rem', color: '#333' }}>{product.name}</strong>
-        <div style={{ color: 'var(--verde-hoja)', fontWeight: 'bold' }}>${Number(product.price).toFixed(2)}</div>
-      </div>
-      
-      {availableToppings.length > 0 && (
-        <div style={{ flex: '2 1 250px', backgroundColor: 'var(--fondo)', padding: '10px', borderRadius: '5px' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', display: 'block', marginBottom: '5px' }}>Toppings:</span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-            {availableToppings.map(t => (
-              <label key={t.id} style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem', cursor: 'pointer' }}>
-                <input type="checkbox" checked={selectedToppings.includes(t.id)} onChange={() => handleToggle(t.id)} />
-                {t.name} (+${t.price})
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <input 
-          type="number" min="1" value={quantity} 
-          onChange={(e) => setQuantity(Number(e.target.value))} 
-          style={{ width: '60px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc', textAlign: 'center' }}
-        />
-        <button onClick={handleAdd} className="btn-rojo" style={{ padding: '8px 15px', backgroundColor: '#333', fontSize: '0.9rem' }}>
-          🛒 Agregar (${subtotal})
-        </button>
-      </div>
-    </div>
-  );
+ return (
+<>
+<style>{`
+.sale-page{
+  background:#fef1e4;
+  min-height:100vh;
+  padding:24px;
 }
+
+.sale-container{
+  max-width:1400px;
+  margin:auto;
+}
+
+.sale-hero{
+  margin-bottom:24px;
+}
+
+.sale-label{
+  color:#c61d0f;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  font-size:.8rem;
+  font-weight:700;
+}
+
+.sale-title{
+  margin:0;
+  color:#891411;
+  font-size:clamp(2.5rem,5vw,5rem);
+  line-height:.9;
+  font-weight:900;
+}
+
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:18px;
+}
+
+.product-card{
+  background:white;
+  border-radius:24px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.product-name{
+  font-size:1.2rem;
+  font-weight:800;
+  color:#891411;
+}
+
+.product-price{
+  font-size:2rem;
+  font-weight:900;
+  color:#c61d0f;
+  margin:10px 0;
+}
+
+.toppings{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0;
+}
+
+.topping-chip{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#fef1e4;
+  font-size:.85rem;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+
+.topping-chip.active{
+  border-color:#c61d0f;
+  background:#fff5f2;
+}
+
+.qty-input{
+  width:80px;
+  text-align:center;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid #ddd;
+}
+
+.add-btn{
+  width:100%;
+  margin-top:12px;
+  border:none;
+  border-radius:14px;
+  padding:12px;
+  background:#891411;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.add-btn:hover{
+  background:#c61d0f;
+}
+
+.order-card{
+  background:white;
+  margin-top:24px;
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.total-box{
+  background:#fef1e4;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  margin:20px 0;
+}
+
+.total-price{
+  font-size:3rem;
+  font-weight:900;
+  color:#c61d0f;
+}
+
+.checkout-btn{
+  width:100%;
+  border:none;
+  border-radius:16px;
+  padding:16px;
+  background:#891411;
+  color:white;
+  font-weight:800;
+  font-size:1.1rem;
+  cursor:pointer;
+}
+
+.checkout-btn:hover{
+  background:#c61d0f;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.delete-btn{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:1.2rem;
+}
+
+@media(max-width:768px){
+
+  .sale-page{
+    padding:16px;
+  }
+
+  .products-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sale-title{
+    font-size:3rem;
+  }
+
+  .total-price{
+    font-size:2.5rem;
+  }
+
+}
+`}</style>
+
+<div className="sale-page">
+<div className="sale-container">
+
+<div className="sale-hero">
+<div className="sale-label">
+Nueva Orden
+</div>
+
+<h1 className="sale-title">
+NUEVA VENTA
+</h1>
+</div>
+
+<div className="products-grid">
+
+{baseProducts.length === 0 ? (
+  <p>Cargando menú...</p>
+) : (
+  baseProducts.map(product => (
+    <ProductRow
+      key={product.id}
+      product={product}
+      availableToppings={availableToppings}
+      onAdd={addToCart}
+    />
+  ))
+)}
+
+</div>
+
+{cart.length > 0 && (
+<div className="order-card">
+
+<h2
+style={{
+marginTop:0,
+color:"#891411"
+}}
+>
+📋 Resumen
+</h2>
+
+{cart.map(item => (
+<div
+key={item.id}
+className="cart-item"
+>
+<div>
+
+<strong>
+{item.quantity}x {item.baseProduct.name}
+</strong>
+
+{item.toppings.length > 0 && (
+<div
+style={{
+fontSize:".85rem",
+color:"#666",
+marginTop:"4px"
+}}
+>
++ {item.toppings.map(t => t.name).join(", ")}
+</div>
+)}
+
+</div>
+
+<div
+style={{
+display:"flex",
+alignItems:"center",
+gap:"10px"
+}}
+>
+
+<strong>
+${item.subtotal.toFixed(2)}
+</strong>
+
+<button
+className="delete-btn"
+onClick={() =>
+setCart(cart.filter(c => c.id !== item.id))
+}
+>
+🗑️
+</button>
+
+</div>
+</div>
+))}
+
+<div className="total-box">
+<div>Total a cobrar</div>
+
+<div className="total-price">
+${cartTotal.toFixed(2)}
+</div>
+</div>
+
+<button
+onClick={handleSubmitOrder}
+disabled={status === "loading"}
+className="checkout-btn"
+>
+{status === "loading"
+? "Procesando..."
+: "🥋 Finalizar Venta"}
+</button>
+
+</div>
+)}
+
+</div>
+</div>
+</>
+);
+
 
 // --- COMPONENTE PRINCIPAL ---
 export default function AdminSaleForm() {
