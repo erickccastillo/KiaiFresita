@@ -13,10 +13,10 @@ import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="app-root flex flex-col min-h-screen w-full">
+    <div className="app-root">
       <Header />
       {/* Se eliminó la clase 'container' y el padding restrictivo */}
-     <main className="app-main flex-1 w-full flex flex-col">
+     <main className="app-main">
         <Routes>
           {/* Rutas Públicas */}
           <Route path="/" element={<Home />} />
