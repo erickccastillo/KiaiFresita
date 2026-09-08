@@ -1,5 +1,5 @@
 /* =========================================
-   CONFIGURACIÓN GLOBAL
+   VARIABLES Y CONFIGURACIÓN GLOBAL
 ========================================= */
 
 :root {
@@ -25,36 +25,36 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
+/* =========================================
+   REINICIO GENERAL
+========================================= */
+
+html,
+body,
+#root {
   width: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
+}
 
+html {
   background-color: var(--fondo);
-
   scroll-behavior: smooth;
 }
 
 body {
-  width: 100%;
   min-width: 280px;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-
+  min-height: 100svh;
   overflow-x: hidden;
-
   background-color: var(--fondo);
   color: var(--texto);
 }
 
 #root {
-  width: 100%;
+  display: flex;
   min-height: 100svh;
-  margin: 0;
-  padding: 0;
-
+  flex-direction: column;
   background-color: var(--fondo);
 }
 
@@ -99,49 +99,64 @@ p {
 }
 
 /* =========================================
-   ESTRUCTURA PRINCIPAL DE LA APLICACIÓN
+   ESTRUCTURA PRINCIPAL
 ========================================= */
 
 .app-root {
   display: flex;
-
   width: 100%;
   min-height: 100svh;
-
+  flex: 1 0 auto;
   flex-direction: column;
-
   background-color: var(--fondo);
 }
 
 /*
-  El Header ahora participa en el flujo normal
-  usando position: sticky.
+  El Header usa position: sticky y permanece
+  dentro del flujo del documento.
 
-  Por eso el main NO necesita padding-top.
+  Por eso no debe existir padding-top
+  compensatorio en app-main.
 */
 
 .app-main {
   display: flex;
-
   width: 100%;
   min-width: 0;
   min-height: 0;
-
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   flex-direction: column;
-
   padding: 0;
-
   background-color: var(--fondo);
 }
 
 /*
-  Hace que el componente mostrado por Routes
-  utilice todo el ancho disponible.
+  El componente renderizado por Routes ocupa
+  todo el ancho y puede aprovechar la altura
+  restante entre Header y Footer.
 */
 
 .app-main > * {
   width: 100%;
+  min-width: 0;
+}
+
+/*
+  Permite que el Home ocupe la altura restante,
+  sin obligar a todas las páginas administrativas
+  a estirarse.
+*/
+
+.app-main > .home-page {
+  flex: 1 1 auto;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.kiai-header {
+  flex: 0 0 auto;
 }
 
 /* =========================================
@@ -150,6 +165,7 @@ p {
 
 footer {
   width: 100%;
+  margin-top: 0;
   flex: 0 0 auto;
 }
 
@@ -159,7 +175,6 @@ footer {
 
 .btn-rojo {
   display: inline-flex;
-
   min-height: 42px;
   padding: 10px 16px;
 
@@ -240,7 +255,7 @@ footer {
 }
 
 /* =========================================
-   RESPONSIVE
+   TABLET Y MÓVIL
 ========================================= */
 
 @media (max-width: 768px) {
@@ -248,44 +263,60 @@ footer {
   body,
   #root {
     min-height: 100svh;
+    background-color: var(--fondo);
   }
-.app-root {
-  display: flex;
-  width: 100%;
-  min-height: 100svh;
-  flex-direction: column;
-  background-color: #fef1e4;
-}
 
-.app-main {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-  flex: 1 0 auto;
-  flex-direction: column;
-  padding: 0;
-  background-color: #fef1e4;
-}
+  .app-root {
+    min-height: 100svh;
+    background-color: var(--fondo);
+  }
 
-.app-main > * {
-  width: 100%;
-  flex: 1 0 auto;
-}
+  .app-main {
+    width: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
+    padding: 0;
+    background-color: var(--fondo);
+  }
+
+  /*
+    El Home absorbe la altura restante de la
+    pantalla, distribuyendo título, fresa y frases.
+  */
+
+  .app-main > .home-page {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    background-color: var(--fondo);
+  }
 
   .btn-rojo {
     min-height: 40px;
     padding: 9px 13px;
-
     border-radius: 11px;
-
     font-size: 0.85rem;
   }
 }
+
+/* =========================================
+   TELÉFONOS PEQUEÑOS
+========================================= */
 
 @media (max-width: 420px) {
   .btn-rojo {
     padding: 8px 11px;
     font-size: 0.78rem;
+  }
+}
+
+/* =========================================
+   PANTALLAS MUY ANGOSTAS
+========================================= */
+
+@media (max-width: 320px) {
+  body {
+    min-width: 280px;
   }
 }
 
