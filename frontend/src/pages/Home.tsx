@@ -388,6 +388,7 @@ export default function Home() {
 
   .stage {
     padding-top: 80px;
+
     padding-left: 20px;
     padding-right: 20px;
 
@@ -400,6 +401,7 @@ export default function Home() {
 
   .brand-word {
     position: relative;
+
     top: 0;
     left: 0;
 
@@ -411,7 +413,7 @@ export default function Home() {
 
     line-height: .85;
 
-    margin-bottom: 60px;
+    margin-bottom: 40px;
   }
 
   .mobile-slogans {
@@ -420,8 +422,8 @@ export default function Home() {
     display: flex;
     justify-content: space-between;
 
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .support-copy {
@@ -438,6 +440,7 @@ export default function Home() {
     text-align: right;
   }
 }
+
 
 
 
