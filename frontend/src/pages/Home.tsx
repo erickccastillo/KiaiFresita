@@ -462,13 +462,21 @@ export default function Home() {
             </span>
           </h1>
 
-          <div className="support-copy support-copy--left">
-            <span className="support-copy__inner">Energía, frescura<br />y diversión.</span>
-          </div>
-          
-          <div className="support-copy support-copy--right">
-            <span className="support-copy__inner">Un golpe<br />de sabor.</span>
-          </div>
+         <div className="mobile-slogans">
+  <div className="support-copy support-copy--left">
+    <span className="support-copy__inner">
+      Energía, frescura<br />
+      y diversión.
+    </span>
+  </div>
+
+  <div className="support-copy support-copy--right">
+    <span className="support-copy__inner">
+      Un golpe<br />
+      de sabor.
+    </span>
+  </div>
+</div>
 
         </section>
       </main>
