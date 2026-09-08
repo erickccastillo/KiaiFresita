@@ -16,6 +16,16 @@
     outline-offset: 2px;
   }
 }
+.app-main{
+  padding-top: 90px;
+}
+
+@media (max-width:768px){
+  .app-main{
+    padding-top: 170px;
+  }
+}
+
 
 .hero {
   position: relative;
