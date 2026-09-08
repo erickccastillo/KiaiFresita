@@ -378,16 +378,15 @@ export default function Home() {
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+@media (max-width: 768px) {
 
   .stage {
-    padding-top: 170px;
-    min-height: calc(100vh - 170px);
+    padding-top: 110px;
+    min-height: 70vh;
   }
 
   .brand-word {
     position: relative;
-
     top: 0;
     left: 0;
 
@@ -395,22 +394,21 @@ export default function Home() {
 
     text-align: center;
 
-    font-size: clamp(4.2rem, 18vw, 6rem);
+    font-size: clamp(4rem, 17vw, 5.5rem);
 
     line-height: .85;
   }
 
   .support-copy {
-
     position: absolute;
 
-    bottom: 8vh;
+    bottom: 14vh;
 
-    width: 40vw;
+    width: 42vw;
 
-    font-size: .95rem;
+    font-size: .9rem;
 
-    line-height: 1.1;
+    line-height: 1.05;
   }
 
   .support-copy--left {
