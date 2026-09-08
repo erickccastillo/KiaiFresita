@@ -155,28 +155,30 @@ export default function Home() {
           box-sizing: border-box;
         }
 
- .home-page {
-          position: relative;
-          display: flex;
-          width: 100%;
-          min-height: calc(100svh - 90px);
-          overflow: hidden;
-          background:
-            radial-gradient(
-              circle at 73% 47%,
-              rgba(198, 29, 15, 0.07),
-              transparent 30%
-            ),
-            var(--home-surface);
-          color: var(--home-ink);
-          font-family:
-            "Nunito",
-            Arial,
-            Helvetica,
-            sans-serif;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
+.home-page {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: calc(100svh - 90px);
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 73% 47%,
+      rgba(198, 29, 15, 0.07),
+      transparent 30%
+    ),
+    var(--home-surface);
+
+  color: var(--home-ink);
+  font-family:
+    "Nunito",
+    Arial,
+    Helvetica,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
         .home-stage {
           position: relative;
