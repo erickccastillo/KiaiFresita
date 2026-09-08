@@ -1,534 +1,15 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import vaso from "../images/vaso.png";
-
-const TRAIL_MAX_POINTS = 60;
-const TRAIL_HEAD_R = 140;
-const TRAIL_NOISE_AMP = 44;
-const TRAIL_BLOB_PTS = 24;
-const TRAIL_FADE_SPEED = 0.92;
-const TRAIL_SAMPLE_DIST = 8;
-
-interface TrailPoint {
-  x: number;
-  y: number;
-  r: number;
-  alpha: number;
-  seed: number;
-}
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [isAnimating, setIsAnimating] =
-    useState(true);
-
-  const stageRef = useRef<HTMLElement>(null);
-  const productRef =
-    useRef<HTMLDivElement>(null);
-  const bgLayerRef =
-    useRef<HTMLDivElement>(null);
-  const topLayerRef =
-    useRef<HTMLDivElement>(null);
+  const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
-    const animationTimer = window.setTimeout(
-      () => {
-        setIsAnimating(false);
-      },
-      6000
-    );
-
-    const stage = stageRef.current;
-    const product = productRef.current;
-    const bgLayer = bgLayerRef.current;
-    const topLayer = topLayerRef.current;
-
-    if (
-      !stage ||
-      !product ||
-      !bgLayer ||
-      !topLayer
-    ) {
-      window.clearTimeout(animationTimer);
-      return;
-    }
-
-    const canvasBG =
-      document.createElement("canvas");
-
-    const contextBG = canvasBG.getContext(
-      "2d",
-      {
-        willReadFrequently: true,
-      }
-    );
-
-    const canvasTop =
-      document.createElement("canvas");
-
-    const contextTop = canvasTop.getContext(
-      "2d",
-      {
-        willReadFrequently: true,
-      }
-    );
-
-    if (!contextBG || !contextTop) {
-      window.clearTimeout(animationTimer);
-      return;
-    }
-
-    let width = 0;
-    let height = 0;
-    let interacting = false;
-    let headRadius = 0;
-    let points: TrailPoint[] = [];
-    let pointerX = 0;
-    let pointerY = 0;
-    let time = 0;
-    let lastSampleX = -999;
-    let lastSampleY = -999;
-    let isDrawing = false;
-    let animationFrameId = 0;
-
-    const updatePointerPosition = (
-      event: PointerEvent
-    ) => {
-      const rect =
-        product.getBoundingClientRect();
-
-      pointerX = event.clientX - rect.left;
-      pointerY = event.clientY - rect.top;
-    };
-
-    const resizeCanvases = () => {
-      const rect =
-        product.getBoundingClientRect();
-
-      const newWidth = Math.max(
-        1,
-        Math.round(rect.width)
-      );
-
-      const newHeight = Math.max(
-        1,
-        Math.round(rect.height)
-      );
-
-      if (
-        newWidth === width &&
-        newHeight === height
-      ) {
-        return;
-      }
-
-      width = newWidth;
-      height = newHeight;
-
-      canvasBG.width = width;
-      canvasBG.height = height;
-
-      canvasTop.width = width;
-      canvasTop.height = height;
-    };
-
-    const drawMorphBlob = (
-      context: CanvasRenderingContext2D,
-      centerX: number,
-      centerY: number,
-      radius: number,
-      currentTime: number,
-      seed: number
-    ) => {
-      if (radius < 2) {
-        return;
-      }
-
-      const blobPoints: Array<{
-        x: number;
-        y: number;
-      }> = [];
-
-      context.beginPath();
-
-      for (
-        let index = 0;
-        index < TRAIL_BLOB_PTS;
-        index += 1
-      ) {
-        const angle =
-          (index / TRAIL_BLOB_PTS) *
-          Math.PI *
-          2;
-
-        const noiseA =
-          Math.sin(
-            angle * 3 +
-              currentTime * 1.4 +
-              seed
-          ) * 0.45;
-
-        const noiseB =
-          Math.sin(
-            angle * 5 -
-              currentTime * 0.9 +
-              seed * 2.3
-          ) * 0.3;
-
-        const noiseC =
-          Math.cos(
-            angle * 2 +
-              currentTime * 1.8 +
-              seed * 0.7
-          ) * 0.25;
-
-        const noise =
-          (noiseA + noiseB + noiseC) *
-          TRAIL_NOISE_AMP *
-          (radius / TRAIL_HEAD_R);
-
-        const finalRadius = Math.max(
-          0,
-          radius + noise
-        );
-
-        blobPoints.push({
-          x:
-            centerX +
-            Math.cos(angle) * finalRadius,
-          y:
-            centerY +
-            Math.sin(angle) * finalRadius,
-        });
-      }
-
-      const firstPoint = blobPoints[0];
-      const lastPoint =
-        blobPoints[blobPoints.length - 1];
-
-      context.moveTo(
-        (firstPoint.x + lastPoint.x) / 2,
-        (firstPoint.y + lastPoint.y) / 2
-      );
-
-      for (
-        let index = 0;
-        index < blobPoints.length;
-        index += 1
-      ) {
-        const currentPoint =
-          blobPoints[index];
-
-        const nextPoint =
-          blobPoints[
-            (index + 1) %
-              blobPoints.length
-          ];
-
-        context.quadraticCurveTo(
-          currentPoint.x,
-          currentPoint.y,
-          (currentPoint.x + nextPoint.x) / 2,
-          (currentPoint.y + nextPoint.y) / 2
-        );
-      }
-
-      context.closePath();
-      context.fill();
-    };
-
-    const stopDrawingIfFinished = () => {
-      if (
-        interacting ||
-        headRadius >= 1 ||
-        points.length > 0
-      ) {
-        return false;
-      }
-
-      bgLayer.style.maskImage = "none";
-      bgLayer.style.webkitMaskImage = "none";
-
-      topLayer.style.maskImage =
-        "linear-gradient(transparent, transparent)";
-
-      topLayer.style.webkitMaskImage =
-        "linear-gradient(transparent, transparent)";
-
-      isDrawing = false;
-
-      return true;
-    };
-
-    const renderFrame = () => {
-      resizeCanvases();
-
-      const targetRadius = interacting
-        ? TRAIL_HEAD_R
-        : 0;
-
-      headRadius +=
-        (targetRadius - headRadius) *
-        (interacting ? 0.14 : 0.04);
-
-      time += 0.016;
-
-      if (
-        interacting &&
-        headRadius > 5
-      ) {
-        const distance = Math.hypot(
-          pointerX - lastSampleX,
-          pointerY - lastSampleY
-        );
-
-        if (
-          distance > TRAIL_SAMPLE_DIST
-        ) {
-          points.unshift({
-            x: pointerX,
-            y: pointerY,
-            r: headRadius,
-            alpha: 1,
-            seed: Math.random() * 100,
-          });
-
-          if (
-            points.length >
-            TRAIL_MAX_POINTS
-          ) {
-            points.pop();
-          }
-
-          lastSampleX = pointerX;
-          lastSampleY = pointerY;
-        }
-      }
-
-      for (
-        let index = points.length - 1;
-        index >= 0;
-        index -= 1
-      ) {
-        const point = points[index];
-
-        point.alpha *= TRAIL_FADE_SPEED;
-        point.r *= 0.995;
-
-        if (point.alpha < 0.01) {
-          points.splice(index, 1);
-        }
-      }
-
-      if (stopDrawingIfFinished()) {
-        return;
-      }
-
-      contextBG.globalCompositeOperation =
-        "source-over";
-
-      contextBG.globalAlpha = 1;
-      contextBG.fillStyle = "#ffffff";
-      contextBG.fillRect(
-        0,
-        0,
-        width,
-        height
-      );
-
-      contextBG.globalCompositeOperation =
-        "destination-out";
-
-      contextBG.fillStyle = "#000000";
-
-      points.forEach((point) => {
-        contextBG.globalAlpha =
-          point.alpha;
-
-        drawMorphBlob(
-          contextBG,
-          point.x,
-          point.y,
-          point.r,
-          time,
-          point.seed
-        );
-      });
-
-      contextBG.globalAlpha = 1;
-
-      contextTop.globalCompositeOperation =
-        "source-over";
-
-      contextTop.globalAlpha = 1;
-      contextTop.clearRect(
-        0,
-        0,
-        width,
-        height
-      );
-
-      contextTop.fillStyle = "#ffffff";
-
-      points.forEach((point) => {
-        contextTop.globalAlpha =
-          point.alpha;
-
-        drawMorphBlob(
-          contextTop,
-          point.x,
-          point.y,
-          point.r,
-          time,
-          point.seed
-        );
-      });
-
-      contextTop.globalAlpha = 1;
-
-      const backgroundMask =
-        canvasBG.toDataURL();
-
-      const topMask =
-        canvasTop.toDataURL();
-
-      bgLayer.style.maskImage =
-        `url("${backgroundMask}")`;
-
-      bgLayer.style.webkitMaskImage =
-        `url("${backgroundMask}")`;
-
-      topLayer.style.maskImage =
-        `url("${topMask}")`;
-
-      topLayer.style.webkitMaskImage =
-        `url("${topMask}")`;
-
-      animationFrameId =
-        window.requestAnimationFrame(
-          renderFrame
-        );
-    };
-
-    const startLoop = () => {
-      if (isDrawing) {
-        return;
-      }
-
-      isDrawing = true;
-      time = performance.now() / 1000;
-
-      animationFrameId =
-        window.requestAnimationFrame(
-          renderFrame
-        );
-    };
-
-    const handlePointerEnter = (
-      event: PointerEvent
-    ) => {
-      interacting = true;
-      updatePointerPosition(event);
-      startLoop();
-    };
-
-    const handlePointerMove = (
-      event: PointerEvent
-    ) => {
-      updatePointerPosition(event);
-
-      if (
-        event.pointerType === "touch"
-      ) {
-        interacting = true;
-        startLoop();
-      }
-    };
-
-    const handlePointerLeave = () => {
-      interacting = false;
-    };
-
-    const handlePointerDown = (
-      event: PointerEvent
-    ) => {
-      interacting = true;
-      updatePointerPosition(event);
-      startLoop();
-    };
-
-    const handlePointerUp = () => {
-      interacting = false;
-    };
-
-    stage.addEventListener(
-      "pointerenter",
-      handlePointerEnter
-    );
-
-    stage.addEventListener(
-      "pointermove",
-      handlePointerMove
-    );
-
-    stage.addEventListener(
-      "pointerleave",
-      handlePointerLeave
-    );
-
-    stage.addEventListener(
-      "pointerdown",
-      handlePointerDown
-    );
-
-    stage.addEventListener(
-      "pointerup",
-      handlePointerUp
-    );
-
-    stage.addEventListener(
-      "pointercancel",
-      handlePointerUp
-    );
+    const animationTimer = window.setTimeout(() => {
+      setIsAnimating(false);
+    }, 2200);
 
     return () => {
       window.clearTimeout(animationTimer);
-
-      window.cancelAnimationFrame(
-        animationFrameId
-      );
-
-      stage.removeEventListener(
-        "pointerenter",
-        handlePointerEnter
-      );
-
-      stage.removeEventListener(
-        "pointermove",
-        handlePointerMove
-      );
-
-      stage.removeEventListener(
-        "pointerleave",
-        handlePointerLeave
-      );
-
-      stage.removeEventListener(
-        "pointerdown",
-        handlePointerDown
-      );
-
-      stage.removeEventListener(
-        "pointerup",
-        handlePointerUp
-      );
-
-      stage.removeEventListener(
-        "pointercancel",
-        handlePointerUp
-      );
     };
   }, []);
 
@@ -538,84 +19,94 @@ export default function Home() {
         @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@700;800;900&display=swap");
 
         :root {
-          --ink: #891411;
-          --primary: #c61d0f;
-          --surface: #fef1e4;
-          --anim-reveal: cubic-bezier(
-            0.16,
-            1,
-            0.3,
-            1
-          );
-          --anim-soft: cubic-bezier(
-            0.25,
-            0.8,
-            0.28,
-            1
-          );
+          --home-ink: #891411;
+          --home-primary: #c61d0f;
+          --home-surface: #fef1e4;
+          --home-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+          --home-soft: cubic-bezier(0.25, 0.8, 0.28, 1);
         }
 
-        .home-viewport,
-        .home-viewport * {
+        .home-page,
+        .home-page * {
           box-sizing: border-box;
         }
 
-        .home-viewport {
+        .home-page {
           position: relative;
+          display: flex;
           width: 100%;
           min-height: calc(100svh - 90px);
           overflow: hidden;
           background:
             radial-gradient(
-              circle at 58% 43%,
-              rgba(198, 29, 15, 0.055),
-              transparent 28%
+              circle at 68% 45%,
+              rgba(198, 29, 15, 0.075),
+              transparent 34%
             ),
-            var(--surface);
-          color: var(--ink);
+            var(--home-surface);
+          color: var(--home-ink);
           font-family:
             "Nunito",
             Arial,
             Helvetica,
             sans-serif;
-          -webkit-font-smoothing:
-            antialiased;
-          -moz-osx-font-smoothing:
-            grayscale;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         .home-stage {
           position: relative;
+          display: flex;
           width: 100%;
           min-height: calc(100svh - 90px);
-          overflow: hidden;
+          padding: clamp(36px, 7vh, 80px) 4.35vw 34px;
+          flex-direction: column;
+          justify-content: space-between;
           isolation: isolate;
-          touch-action: pan-y;
+        }
+
+        .home-stage::before {
+          position: absolute;
+          z-index: -1;
+          top: 50%;
+          left: 58%;
+          width: min(36vw, 480px);
+          aspect-ratio: 1;
+          content: "";
+          background: rgba(198, 29, 15, 0.045);
+          border: 1px solid rgba(137, 20, 17, 0.055);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .home-stage::after {
+          position: absolute;
+          z-index: -1;
+          top: 50%;
+          left: 58%;
+          width: min(22vw, 290px);
+          aspect-ratio: 1;
+          content: "";
+          border: 2px solid rgba(137, 20, 17, 0.06);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
         }
 
         .home-brand {
-          position: absolute;
-          z-index: 1;
-          top: clamp(35px, 8vh, 90px);
-          left: 4.35vw;
+          width: fit-content;
           margin: 0;
-          font-family:
-            "Fredoka",
-            sans-serif;
-          font-size: min(
-            17.8125vw,
-            32dvh
-          );
+          font-family: "Fredoka", sans-serif;
+          font-size: min(17.8125vw, 31dvh);
           font-weight: 700;
-          letter-spacing: -0.035em;
           line-height: 0.82;
+          letter-spacing: -0.045em;
           white-space: nowrap;
         }
 
         .home-brand-mask {
           display: inline-block;
-          padding: 0.04em 0.04em 0.16em;
-          margin: -0.04em -0.04em -0.16em;
+          margin: -0.05em -0.05em -0.17em;
+          padding: 0.05em 0.05em 0.17em;
           overflow: hidden;
         }
 
@@ -624,88 +115,62 @@ export default function Home() {
         }
 
         .home-brand-dark {
-          color: var(--ink);
+          color: var(--home-ink);
         }
 
         .home-brand-primary {
           background:
             linear-gradient(
               135deg,
-              var(--primary) 0%,
-              var(--ink) 100%
+              var(--home-primary) 0%,
+              var(--home-ink) 100%
             );
           color: transparent;
           background-clip: text;
           -webkit-background-clip: text;
         }
 
-        .home-product {
+        .home-center-message {
           position: absolute;
-          z-index: 2;
-          top: 18dvh;
-          left: 56%;
-          height: min(60dvh, 670px);
-          transform: translateX(-50%);
-          pointer-events: none;
+          top: 51%;
+          left: 66%;
+          width: min(27vw, 390px);
+          color: rgba(137, 20, 17, 0.78);
+          font-size: clamp(0.75rem, 1vw, 1rem);
+          font-weight: 900;
+          line-height: 1.4;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.16em;
+          transform: translate(-50%, -50%);
         }
 
-        .home-product-sizer {
+        .home-center-dot {
           display: block;
-          width: auto;
-          height: 100%;
-          visibility: hidden;
-        }
-
-        .home-product-layer {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          border-radius: 40px;
+          width: 9px;
+          height: 9px;
+          margin: 0 auto 14px;
+          background: var(--home-primary);
+          border-radius: 50%;
           box-shadow:
-            0 30px 60px
-            rgba(137, 20, 17, 0.15);
-          mask-size: 100% 100%;
-          mask-repeat: no-repeat;
-          -webkit-mask-size: 100% 100%;
-          -webkit-mask-repeat: no-repeat;
-        }
-
-        .home-product-layer-top {
-          mask-image:
-            linear-gradient(
-              transparent,
-              transparent
-            );
-          -webkit-mask-image:
-            linear-gradient(
-              transparent,
-              transparent
-            );
-        }
-
-        .home-product-image {
-          display: block;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+            0 0 0 7px rgba(198, 29, 15, 0.075);
         }
 
         .home-slogans {
-          position: static;
+          display: grid;
+          width: 100%;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          align-items: end;
+          gap: 24px;
         }
 
         .home-support-copy {
-          position: absolute;
-          z-index: 3;
-          bottom: 5dvh;
           margin: 0;
-          color: var(--primary);
+          color: var(--home-primary);
           font-size: clamp(
             16px,
             min(1.6vw, 2.5dvh),
-            32px
+            30px
           );
           font-weight: 800;
           line-height: 1.08;
@@ -713,12 +178,7 @@ export default function Home() {
           letter-spacing: 0.05em;
         }
 
-        .home-support-copy-left {
-          left: 4.35vw;
-        }
-
         .home-support-copy-right {
-          right: 5vw;
           text-align: right;
         }
 
@@ -736,26 +196,10 @@ export default function Home() {
           }
         }
 
-        @keyframes home-product-enter {
-          from {
-            opacity: 0;
-            transform:
-              translateX(-50%)
-              translateY(5dvh);
-          }
-
-          to {
-            opacity: 1;
-            transform:
-              translateX(-50%)
-              translateY(0);
-          }
-        }
-
         @keyframes home-copy-enter {
           from {
             opacity: 0;
-            transform: translateY(2dvh);
+            transform: translateY(18px);
           }
 
           to {
@@ -764,152 +208,131 @@ export default function Home() {
           }
         }
 
-        @keyframes home-mobile-product-enter {
+        @keyframes home-center-enter {
           from {
             opacity: 0;
             transform:
-              translateY(18px)
-              scale(0.97);
+              translate(-50%, -45%)
+              scale(0.96);
           }
 
           to {
             opacity: 1;
             transform:
-              translateY(0)
+              translate(-50%, -50%)
               scale(1);
           }
         }
 
-        .home-anim
-        .home-brand-inner {
+        .home-anim .home-brand-inner {
           animation:
             home-word-enter
-            1150ms
-            var(--anim-reveal)
-            300ms
+            1050ms
+            var(--home-reveal)
+            180ms
             both;
         }
 
-        .home-anim
-        .home-product {
-          animation:
-            home-product-enter
-            1150ms
-            var(--anim-reveal)
-            660ms
-            both;
-        }
-
-        .home-anim
-        .home-support-copy-inner {
+        .home-anim .home-support-copy-inner {
           animation:
             home-copy-enter
-            720ms
-            var(--anim-soft)
-            980ms
+            700ms
+            var(--home-soft)
+            760ms
+            both;
+        }
+
+        .home-anim .home-center-message {
+          animation:
+            home-center-enter
+            850ms
+            var(--home-reveal)
+            600ms
             both;
         }
 
         @media (max-width: 768px) {
-          .home-viewport {
+          .home-page {
             min-height: auto;
             overflow: visible;
             background:
               radial-gradient(
-                circle at 50% 52%,
-                rgba(198, 29, 15, 0.07),
-                transparent 37%
+                circle at 50% 48%,
+                rgba(198, 29, 15, 0.08),
+                transparent 45%
               ),
-              var(--surface);
+              var(--home-surface);
           }
 
           .home-stage {
             display: flex;
             min-height: auto;
-            padding:
-              clamp(24px, 6vw, 42px)
-              16px
-              24px;
-            overflow: visible;
-            flex-direction: column;
+            padding: 30px 18px 26px;
+            justify-content: flex-start;
             align-items: center;
-            gap: 0;
+          }
+
+          .home-stage::before {
+            top: 55%;
+            left: 50%;
+            width: min(74vw, 320px);
+            opacity: 0.8;
+          }
+
+          .home-stage::after {
+            top: 55%;
+            left: 50%;
+            width: min(47vw, 205px);
           }
 
           .home-brand {
-            position: relative;
-            top: auto;
-            left: auto;
-            z-index: 3;
             width: 100%;
-            margin: 0;
             text-align: center;
-            font-size: clamp(
-              3.8rem,
-              18.5vw,
-              5.5rem
-            );
-            line-height: 0.8;
+            font-size: clamp(3.7rem, 18.5vw, 5.3rem);
+            line-height: 0.79;
           }
 
           .home-brand-mask {
             max-width: 100%;
           }
 
-          .home-product {
+          .home-center-message {
             position: relative;
             top: auto;
             left: auto;
-            z-index: 2;
-            width: min(68vw, 290px);
-            height: auto;
-            aspect-ratio: 4 / 5;
-            margin:
-              clamp(18px, 5vw, 28px)
-              auto
-              0;
+            width: min(80%, 310px);
+            min-height: 135px;
+            margin: 44px auto 36px;
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.67rem, 2.9vw, 0.82rem);
+            line-height: 1.45;
+            letter-spacing: 0.13em;
             transform: none;
           }
 
-          .home-product-sizer {
-            width: 100%;
-            height: 100%;
-          }
-
-          .home-product-layer {
-            border-radius: 26px;
-            box-shadow:
-              0 18px 38px
-              rgba(137, 20, 17, 0.16);
-          }
-
-          .home-product-image {
-            object-fit: cover;
+          .home-center-dot {
+            width: 8px;
+            height: 8px;
+            margin-bottom: 13px;
           }
 
           .home-slogans {
-            display: grid;
+            position: relative;
             width: 100%;
             max-width: 520px;
-            margin-top:
-              clamp(20px, 6vw, 32px);
-            grid-template-columns:
-              minmax(0, 1fr)
-              minmax(0, 1fr);
-            gap: 16px;
+            padding-top: 22px;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 14px;
+            border-top: 2px solid rgba(137, 20, 17, 0.13);
           }
 
           .home-support-copy {
-            position: relative;
-            inset: auto;
-            width: auto;
-            margin: 0;
-            font-size: clamp(
-              0.72rem,
-              3.4vw,
-              0.92rem
-            );
-            line-height: 1.12;
+            font-size: clamp(0.7rem, 3.2vw, 0.88rem);
+            line-height: 1.13;
           }
 
           .home-support-copy-left {
@@ -920,111 +343,68 @@ export default function Home() {
             text-align: right;
           }
 
-          .home-anim
-          .home-product {
+          .home-anim .home-center-message {
             animation:
-              home-mobile-product-enter
-              900ms
-              var(--anim-reveal)
-              600ms
+              home-copy-enter
+              800ms
+              var(--home-reveal)
+              520ms
               both;
           }
         }
 
         @media (max-width: 420px) {
           .home-stage {
-            padding:
-              20px
-              14px
-              20px;
+            padding: 24px 14px 22px;
           }
 
           .home-brand {
-            font-size: clamp(
-              3.55rem,
-              18vw,
-              4.7rem
-            );
+            font-size: clamp(3.35rem, 17.8vw, 4.5rem);
           }
 
-          .home-product {
-            width: min(64vw, 250px);
-            margin-top: 18px;
+          .home-center-message {
+            min-height: 120px;
+            margin: 35px auto 28px;
+            padding: 24px 12px;
+            font-size: 0.67rem;
           }
 
           .home-slogans {
-            margin-top: 20px;
+            padding-top: 18px;
             gap: 10px;
           }
 
           .home-support-copy {
-            font-size: clamp(
-              0.68rem,
-              3.2vw,
-              0.82rem
-            );
+            font-size: clamp(0.64rem, 3vw, 0.76rem);
           }
         }
 
-        @media (
-          max-width: 768px
-        ) and (
-          max-height: 720px
-        ) {
+        @media (max-width: 768px) and (max-height: 720px) {
           .home-stage {
-            padding-top: 16px;
-            padding-bottom: 16px;
+            padding-top: 18px;
+            padding-bottom: 18px;
           }
 
           .home-brand {
-            font-size: clamp(
-              3.2rem,
-              16vw,
-              4.3rem
-            );
+            font-size: clamp(3rem, 15.5vw, 4.1rem);
           }
 
-          .home-product {
-            width: min(52vw, 215px);
-            margin-top: 14px;
+          .home-center-message {
+            min-height: 90px;
+            margin: 24px auto 20px;
+            padding: 18px 10px;
           }
 
           .home-slogans {
-            margin-top: 16px;
+            padding-top: 15px;
           }
         }
 
-        @media (
-          min-width: 769px
-        ) and (
-          max-height: 700px
-        ) {
-          .home-brand {
-            top: 5dvh;
-            font-size: min(
-              15vw,
-              27dvh
-            );
-          }
-
-          .home-product {
-            top: 14dvh;
-            height: 58dvh;
-          }
-
-          .home-support-copy {
-            bottom: 3dvh;
-          }
-        }
-
-        @media (
-          prefers-reduced-motion:
-          reduce
-        ) {
+        @media (prefers-reduced-motion: reduce) {
           .home-anim *,
-          .home-product,
           .home-brand-inner,
-          .home-support-copy-inner {
+          .home-support-copy-inner,
+          .home-center-message {
             animation: none !important;
             transition: none !important;
           }
@@ -1032,14 +412,11 @@ export default function Home() {
       `}</style>
 
       <main
-        className={`home-viewport ${
-          isAnimating
-            ? "home-anim"
-            : ""
+        className={`home-page ${
+          isAnimating ? "home-anim" : ""
         }`}
       >
         <section
-          ref={stageRef}
           className="home-stage"
           aria-labelledby="home-brand-title"
         >
@@ -1064,41 +441,21 @@ export default function Home() {
           </h1>
 
           <div
-            ref={productRef}
-            className="home-product"
-            aria-label="Producto Kiai Fresita"
+            className="home-center-message"
+            aria-label="Mensaje de la marca"
           >
-            {vaso}
-
-            <div
-              ref={bgLayerRef}
-              className="
-                home-product-layer
-                home-product-layer-background
-              "
-            >
-              {vaso}
-            </div>
-
-            <div
-              ref={topLayerRef}
-              className="
-                home-product-layer
-                home-product-layer-top
-              "
+            <span
+              className="home-center-dot"
               aria-hidden="true"
-            >
-              {vaso}
-            </div>
+            />
+
+            Sabor que transforma
+            <br />
+            cualquier momento
           </div>
 
           <div className="home-slogans">
-            <p
-              className="
-                home-support-copy
-                home-support-copy-left
-              "
-            >
+            <p className="home-support-copy home-support-copy-left">
               <span className="home-support-copy-inner">
                 Energía, frescura
                 <br />
@@ -1106,12 +463,7 @@ export default function Home() {
               </span>
             </p>
 
-            <p
-              className="
-                home-support-copy
-                home-support-copy-right
-              "
-            >
+            <p className="home-support-copy home-support-copy-right">
               <span className="home-support-copy-inner">
                 Un golpe
                 <br />
