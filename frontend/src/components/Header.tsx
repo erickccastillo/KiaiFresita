@@ -219,7 +219,10 @@ export default function Header() {
           className="kiai-header-logo-link"
           aria-label="Ir al inicio de Kiai Fresita"
         >
-          {logo}
+          <img
+src={logo}
+alt="Kiai Fresita"
+            />
         </Link>
 
         <nav
