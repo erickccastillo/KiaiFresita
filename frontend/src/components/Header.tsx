@@ -47,15 +47,13 @@ export default function Header() {
         }
 
         .kiai-header-logo {
-          display: block;
-
-          width: auto;
-          height: 64px;
-
-          object-fit: contain;
-
-          transition: transform 0.2s ease;
-        }
+  display: block;
+  width: auto;
+  height: 52px;
+  max-width: 140px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
 
         .kiai-header-logo-link:hover .kiai-header-logo {
           transform: scale(1.04);
@@ -175,9 +173,13 @@ export default function Header() {
             gap: 8px;
           }
 
-          .kiai-header-logo {
-            height: 48px;
-          }
+
+@media (max-width: 390px) {
+  .kiai-header-logo {
+    height: 38px;
+    max-width: 95px;
+  }
+}
 
           .kiai-header-navigation {
             gap: 6px;
