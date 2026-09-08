@@ -387,10 +387,7 @@ export default function Home() {
   }
 
   .stage {
-    padding-top: 80px;
-
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 40px;
 
     display: flex;
     flex-direction: column;
@@ -413,17 +410,18 @@ export default function Home() {
 
     line-height: .85;
 
-    margin-bottom: 40px;
+    margin-bottom: 50px;
   }
 
   .mobile-slogans {
     width: 100%;
 
+    padding: 0 20px;
+
     display: flex;
     justify-content: space-between;
 
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .support-copy {
