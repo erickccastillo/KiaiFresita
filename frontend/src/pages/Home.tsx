@@ -688,7 +688,7 @@ export default function Home() {
           .home-page {
             min-height: auto;
             overflow: visible;
-            background: var(--home-surface;
+            background: var(--home-surface);
           }
 
           .home-stage {
